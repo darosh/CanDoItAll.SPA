@@ -7,7 +7,7 @@
  * opens            : /projects/:projectId/structure
  * opens            : /projects/:projectId/gantt
  * opens            : /projects/:projectId/files
- * opens            : /projects/:projectId/management
+ * opens            : /projects/:projectId/manager-summary
  * opens            : /projects/:projectId/processes
  * opens            : /projects/:projectId/processes/runs
  * opens            : /projects/:projectId/calendar

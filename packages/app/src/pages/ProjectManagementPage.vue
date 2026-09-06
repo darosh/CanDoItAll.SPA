@@ -1,6 +1,9 @@
 <script setup lang="ts">
 /**
- * URL              : http://localhost:5173/projects/:projectId/management
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Workbench/Pages/Components/ProjectStructure/ProjectManagerSummaryPanel.razor
+ * original URL     : http://localhost:5032/:projectId/structure
+ * original trigger : select the Manager Summary tab
+ * URL              : http://localhost:5173/projects/:projectId/manager-summary
  */
 
 import { useRoute } from "vue-router";
@@ -8,16 +11,19 @@ import DevNotes from "@/components/DevNotes.vue";
 import StubPage from "@/components/StubPage.vue";
 import { projectDetailTabs } from "@/lib/subNavTabs";
 
-const devNotes = `URL              : http://localhost:5173/projects/:projectId/management`;
+const devNotes = `original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Workbench/Pages/Components/ProjectStructure/ProjectManagerSummaryPanel.razor
+original URL     : http://localhost:5032/:projectId/structure
+original trigger : select the Manager Summary tab
+URL              : http://localhost:5173/projects/:projectId/manager-summary`;
 
 const route = useRoute();
 </script>
 
 <template>
   <StubPage
-    title="Project management"
+    title="Project manager summary"
     :tabs="projectDetailTabs(String(route.params.projectId))"
-    selected="management"
+    selected="manager-summary"
   />
   <DevNotes :text="devNotes" />
 </template>

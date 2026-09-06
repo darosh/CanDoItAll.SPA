@@ -1,7 +1,9 @@
 // One-off generator: scaffolds stub page components + a router manifest from a
 // declarative route table. Re-run any time the nav proposal's route table changes;
-// it will not touch pages that were hand-built (prompts list/detail are skipped here
-// and wired manually in router/index.ts).
+// it will not touch pages that are hand-built and wired manually in
+// router/index.ts's `handBuilt` array — the `handBuilt` set below must list
+// every path that array covers, or this script will scaffold a dead duplicate
+// stub next to the real (often subfolder-nested) page.
 import { mkdirSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -18,7 +20,12 @@ const routes = [
   ["workspace", "/projects/:projectId/structure", "Project structure", "ProjectStructurePage"],
   ["workspace", "/projects/:projectId/gantt", "Project gantt", "ProjectGanttPage"],
   ["workspace", "/projects/:projectId/files", "Project files", "ProjectFilesPage"],
-  ["workspace", "/projects/:projectId/management", "Project management", "ProjectManagementPage"],
+  [
+    "workspace",
+    "/projects/:projectId/manager-summary",
+    "Project manager summary",
+    "ProjectManagementPage",
+  ],
   ["workspace", "/projects/:projectId/processes", "Project processes", "ProjectProcessesPage"],
   [
     "workspace",
@@ -27,7 +34,7 @@ const routes = [
     "ProjectProcessRunsPage",
   ],
   ["workspace", "/projects/:projectId/calendar", "Project calendar", "ProjectCalendarPage"],
-  ["workspace", "/collaboration/inbox", "Inbox", "CollaborationInboxPage"],
+  ["workspace", "/collaboration", "Collaboration", "CollaborationInboxPage"],
   ["workspace", "/collaboration/threads", "All threads", "CollaborationThreadsPage"],
   [
     "workspace",
@@ -151,8 +158,25 @@ const routes = [
   ["settings", "/settings/database", "Database profiles", "SettingsDatabasePage"],
 ];
 
-// Pages built by hand elsewhere — do not stub-generate these.
-const handBuilt = new Set(["/prompts", "/prompts/:promptId"]);
+// Paths hand-built elsewhere and wired manually in router/index.ts's
+// `handBuilt` array — keep this list identical to that array's paths. Do not
+// stub-generate or emit an import for these; the real (often subfolder-nested)
+// component is registered there instead.
+const handBuilt = new Set([
+  "/prompts",
+  "/prompts/:promptId",
+  "/processes",
+  "/processes/:processId",
+  "/processes/:processId/design",
+  "/processes/:processId/roles",
+  "/projects",
+  "/projects/new",
+  "/projects/:projectId",
+  "/workflows",
+  "/workflows/:workflowId/design",
+  "/settings/runtime-capabilities",
+  "/settings/api-access",
+]);
 
 for (const [, path, title, componentName] of routes) {
   if (handBuilt.has(path)) continue;

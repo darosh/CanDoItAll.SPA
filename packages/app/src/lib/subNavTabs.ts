@@ -10,7 +10,11 @@ export function projectDetailTabs(projectId: string) {
     { key: "structure", label: "Structure", to: `/projects/${projectId}/structure` },
     { key: "gantt", label: "Gantt", to: `/projects/${projectId}/gantt` },
     { key: "files", label: "Files", to: `/projects/${projectId}/files` },
-    { key: "management", label: "Management", to: `/projects/${projectId}/management` },
+    {
+      key: "manager-summary",
+      label: "Manager Summary",
+      to: `/projects/${projectId}/manager-summary`,
+    },
     { key: "processes", label: "Processes", to: `/projects/${projectId}/processes` },
     { key: "runs", label: "Live runs", to: `/projects/${projectId}/processes/runs` },
     { key: "calendar", label: "Calendar", to: `/projects/${projectId}/calendar` },

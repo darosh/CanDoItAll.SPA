@@ -59,10 +59,28 @@ const handBuilt: RouteRecordRaw[] = [
     meta: { title: "Project overview", dynamicTitle: true },
   },
   {
+    path: "/workflows",
+    name: "workflows",
+    component: () => import("@/pages/workflows/WorkflowsPage.vue"),
+    meta: { title: "Workflows" },
+  },
+  {
     path: "/workflows/:workflowId/design",
     name: "workflow-design",
     component: () => import("@/pages/workflows/WorkflowDesignerPage.vue"),
     meta: { title: "Workflow designer", dynamicTitle: true },
+  },
+  {
+    path: "/settings/runtime-capabilities",
+    name: "settings-runtime-capabilities",
+    component: () => import("@/pages/settings/SettingsRuntimeCapabilitiesPage.vue"),
+    meta: { title: "Runtime capabilities" },
+  },
+  {
+    path: "/settings/api-access",
+    name: "settings-api-access",
+    component: () => import("@/pages/SettingsApiAccessPage.vue"),
+    meta: { title: "API access" },
   },
 ];
 

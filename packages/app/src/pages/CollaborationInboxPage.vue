@@ -21,6 +21,6 @@ opens            : /collaboration/threads/:threadId`;
 </script>
 
 <template>
-  <StubPage title="Inbox" :tabs="collaborationTabs()" selected="inbox" />
+  <StubPage title="Collaboration" :tabs="collaborationTabs()" selected="inbox" />
   <DevNotes :text="devNotes" />
 </template>
