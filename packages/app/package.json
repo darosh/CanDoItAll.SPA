@@ -8,7 +8,8 @@
     "build": "vue-tsc --build && vp build",
     "preview": "vp preview",
     "test": "vp test run --passWithNoTests",
-    "type-check": "vue-tsc --build"
+    "type-check": "vue-tsc --build",
+    "sitemap": "node scripts/generate-sitemap.mjs"
   },
   "dependencies": {
     "@candoitall/api-client": "workspace:*",

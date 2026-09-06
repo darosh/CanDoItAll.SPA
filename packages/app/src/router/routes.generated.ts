@@ -385,12 +385,6 @@ export const generatedRoutes: GeneratedRoute[] = [
   },
   {
     group: "settings",
-    path: "/settings/workspace",
-    title: "Workspace settings",
-    component: () => import("@/pages/SettingsWorkspacePage.vue"),
-  },
-  {
-    group: "settings",
     path: "/settings/data-sources",
     title: "Data sources",
     component: () => import("@/pages/SettingsDataSourcesPage.vue"),

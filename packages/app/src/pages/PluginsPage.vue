@@ -3,6 +3,7 @@
  * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Plugins/Pages/PluginsPage.razor
  * original URL     : http://localhost:5032/plugins
  * URL              : http://localhost:5173/plugins
+ * opens            : /plugins/:pluginId
  */
 
 import DevNotes from "@/components/DevNotes.vue";
@@ -10,7 +11,8 @@ import StubPage from "@/components/StubPage.vue";
 
 const devNotes = `original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Plugins/Pages/PluginsPage.razor
 original URL     : http://localhost:5032/plugins
-URL              : http://localhost:5173/plugins`;
+URL              : http://localhost:5173/plugins
+opens            : /plugins/:pluginId`;
 </script>
 
 <template>

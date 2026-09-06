@@ -3,6 +3,7 @@
  * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Prompts/Pages/PromptGalleryPage.razor
  * original URL     : http://localhost:5032/prompt-gallery
  * URL              : http://localhost:5173/prompts
+ * opens            : /prompts/:promptId
  */
 
 import { Star } from "@lucide/vue";

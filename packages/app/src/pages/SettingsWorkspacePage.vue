@@ -2,7 +2,14 @@
 /**
  * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Workspace/Pages/SettingsPage.razor
  * original URL     : http://localhost:5032/settings
- * URL              : http://localhost:5173/settings/workspace
+ * URL              : http://localhost:5173/settings
+ * opens            : /settings/api-access
+ * opens            : /settings/data-sources
+ * opens            : /settings/database
+ * opens            : /settings/files
+ * opens            : /settings/runtime-capabilities
+ * opens            : /settings/secrets
+ * opens            : /settings/storage
  */
 
 import type { WorkspaceSettingsModel } from "@candoitall/api-client";

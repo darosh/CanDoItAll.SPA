@@ -113,8 +113,7 @@ const routes = [
   ["library", "/test-lab/plans/:planId", "Test plan detail", "TestPlanDetailPage"],
 
   // Settings
-  ["settings", "/settings", "Settings", "SettingsPage"],
-  ["settings", "/settings/workspace", "Workspace settings", "SettingsWorkspacePage"],
+  ["settings", "/settings", "Settings", "SettingsWorkspacePage"],
   ["settings", "/settings/data-sources", "Data sources", "SettingsDataSourcesPage"],
   ["settings", "/settings/storage", "Storage", "SettingsStoragePage"],
   ["settings", "/settings/files", "Files", "SettingsFilesPage"],

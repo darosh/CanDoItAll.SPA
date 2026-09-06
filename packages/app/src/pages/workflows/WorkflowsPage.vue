@@ -4,6 +4,7 @@
  * original URL     : http://localhost:5032/agents/workflows
  * original trigger : click the Workflows tab (also absorbs the Dashboard tab as the landing view)
  * URL              : http://localhost:5173/workflows
+ * opens            : /workflows/:workflowId
  */
 
 import type {

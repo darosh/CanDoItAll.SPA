@@ -4,6 +4,8 @@
  * original URL     : http://localhost:5032/agents/workflows
  * original trigger : click the Workflows tab, then select a workflow
  * URL              : http://localhost:5173/workflows/:workflowId
+ * opens            : /workflows/:workflowId/design
+ * opens            : /workflows/:workflowId/runs
  */
 
 import { useRoute } from "vue-router";
@@ -14,7 +16,9 @@ import { workflowDetailTabs } from "@/lib/subNavTabs";
 const devNotes = `original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.AgentFramework/Pages/WorkflowsPage.razor
 original URL     : http://localhost:5032/agents/workflows
 original trigger : click the Workflows tab, then select a workflow
-URL              : http://localhost:5173/workflows/:workflowId`;
+URL              : http://localhost:5173/workflows/:workflowId
+opens            : /workflows/:workflowId/design
+opens            : /workflows/:workflowId/runs`;
 
 const route = useRoute();
 </script>

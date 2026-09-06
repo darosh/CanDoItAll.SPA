@@ -4,6 +4,10 @@
  * original URL     : http://localhost:5032/agents
  * original trigger : select an agent
  * URL              : http://localhost:5173/agents/:agentId
+ * opens            : /agents/:agentId/configuration
+ * opens            : /agents/:agentId/capabilities
+ * opens            : /agents/:agentId/governance
+ * opens            : /agents/:agentId/activity
  */
 
 import { useRoute } from "vue-router";
@@ -14,7 +18,11 @@ import { agentDetailTabs } from "@/lib/subNavTabs";
 const devNotes = `original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.AgentFramework/Pages/AgentsHomePage.razor
 original URL     : http://localhost:5032/agents
 original trigger : select an agent
-URL              : http://localhost:5173/agents/:agentId`;
+URL              : http://localhost:5173/agents/:agentId
+opens            : /agents/:agentId/configuration
+opens            : /agents/:agentId/capabilities
+opens            : /agents/:agentId/governance
+opens            : /agents/:agentId/activity`;
 
 const route = useRoute();
 </script>

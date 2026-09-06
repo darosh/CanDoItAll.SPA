@@ -3,6 +3,10 @@
  * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Processes/Pages/ProcessesPage.razor
  * original URL     : http://localhost:5032/processes
  * URL              : http://localhost:5173/processes
+ * opens            : /processes/:processId
+ * opens            : /processes/:processId/activity
+ * opens            : /processes/:processId/design
+ * opens            : /processes/:processId/roles
  */
 
 import { onMounted, reactive, ref, watch } from "vue";

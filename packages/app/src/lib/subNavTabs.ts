@@ -78,7 +78,7 @@ export function agentsCatalogTabs() {
 
 export function settingsTabs() {
   return [
-    { key: "workspace", label: "Workspace", to: "/settings/workspace" },
+    { key: "workspace", label: "Workspace", to: "/settings" },
     { key: "data-sources", label: "Data sources", to: "/settings/data-sources" },
     { key: "storage", label: "Storage", to: "/settings/storage" },
     { key: "files", label: "Files", to: "/settings/files" },

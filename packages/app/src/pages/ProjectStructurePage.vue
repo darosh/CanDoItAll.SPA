@@ -3,6 +3,7 @@
  * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Workbench/Pages/ProjectStructurePage.razor
  * original URL     : http://localhost:5032/projects/:projectId/structure
  * URL              : http://localhost:5173/projects/:projectId/structure
+ * opens            : /projects/:projectId/gantt
  */
 
 import { computed, onMounted, ref } from "vue";

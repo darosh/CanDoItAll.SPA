@@ -4,6 +4,11 @@
  * original URL     : http://localhost:5032/projects
  * original trigger : select a project from the list
  * URL              : http://localhost:5173/projects/:projectId
+ * opens            : /projects/:projectId/structure
+ * opens            : /projects/:projectId/gantt
+ * opens            : /projects/:projectId/files
+ * opens            : /projects/:projectId/management
+ * opens            : /projects/:projectId/processes
  */
 
 import type {

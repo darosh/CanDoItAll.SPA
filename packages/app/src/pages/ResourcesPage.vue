@@ -3,6 +3,8 @@
  * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Resources/Pages/ResourcesPage.razor
  * original URL     : http://localhost:5032/resources
  * URL              : http://localhost:5173/resources
+ * opens            : /resources/:resourceId
+ * opens            : /resources/browse
  */
 
 import DevNotes from "@/components/DevNotes.vue";
@@ -11,7 +13,9 @@ import { resourcesTabs } from "@/lib/subNavTabs";
 
 const devNotes = `original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Resources/Pages/ResourcesPage.razor
 original URL     : http://localhost:5032/resources
-URL              : http://localhost:5173/resources`;
+URL              : http://localhost:5173/resources
+opens            : /resources/:resourceId
+opens            : /resources/browse`;
 </script>
 
 <template>
