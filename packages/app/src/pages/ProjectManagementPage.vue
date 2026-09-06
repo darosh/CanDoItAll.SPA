@@ -4,8 +4,11 @@
  */
 
 import { useRoute } from "vue-router";
+import DevNotes from "@/components/DevNotes.vue";
 import StubPage from "@/components/StubPage.vue";
 import { projectDetailTabs } from "@/lib/subNavTabs";
+
+const devNotes = `URL              : http://localhost:5173/projects/:projectId/management`;
 
 const route = useRoute();
 </script>
@@ -16,4 +19,5 @@ const route = useRoute();
     :tabs="projectDetailTabs(String(route.params.projectId))"
     selected="management"
   />
+  <DevNotes :text="devNotes" />
 </template>
