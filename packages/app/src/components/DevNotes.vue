@@ -3,9 +3,25 @@ import { computed } from "vue";
 
 const props = defineProps<{ text: string }>();
 
-const parts = computed(() => props.text.split(/(https?:\/\/\S+)/g).filter((part) => part !== ""));
+const parts = computed(() =>
+  props.text.split(/(https?:\/\/\S+|(?<=^|\s)\/\S+)/g).filter((part) => part !== ""),
+);
+
+function isLink(part: string): boolean {
+  return part.startsWith("http://") || part.startsWith("https://") || part.startsWith("/");
+}
+
+function isExternal(part: string): boolean {
+  if (part.startsWith("/")) return false;
+  try {
+    return new URL(part).origin !== window.location.origin;
+  } catch {
+    return false;
+  }
+}
 
 function shorten(url: string): string {
+  if (url.startsWith("/")) return url;
   let u: URL;
   try {
     u = new URL(url);
@@ -25,10 +41,9 @@ function shorten(url: string): string {
   <pre
     class="mx-6 leading-5 overflow-x-auto rounded-md border border-dashed border-border bg-muted/40 p-3 text-xs text-muted-foreground"
   ><template v-for="(part, i) in parts" :key="i"><a
-      v-if="part.startsWith('http://') || part.startsWith('https://')"
+      v-if="isLink(part)"
       :href="part"
-      target="_blank"
-      rel="noopener noreferrer"
+      v-bind="isExternal(part) ? { target: '_blank', rel: 'noopener noreferrer' } : {}"
       class="text-foreground underline underline-offset-2"
     >{{ shorten(part) }}</a><template v-else>{{ part }}</template></template></pre>
 </template>
