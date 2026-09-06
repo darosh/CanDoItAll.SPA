@@ -22,7 +22,7 @@ const emit = defineEmits<{
 const isHovered = ref(false);
 
 const breadcrumbTrail = computed(() =>
-  tab.breadcrumbs.length > 0 ? tab.breadcrumbs.map((crumb) => crumb.title).join(" / ") : tab.title,
+  tab.breadcrumbs.length > 0 ? tab.breadcrumbs.map((crumb) => crumb.title).join(" > ") : tab.title,
 );
 </script>
 
