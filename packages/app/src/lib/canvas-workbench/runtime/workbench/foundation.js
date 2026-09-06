@@ -883,7 +883,7 @@ export function collectProjectedContextNodeIds(state) {
     contextNodeIds.add(state.hoveredNodeId);
   }
 
-  for (const nodeId of [...contextNodeIds]) {
+  for (const nodeId of contextNodeIds) {
     let current = state.lookups.byId.get(nodeId) || null;
     while (current?.parentId) {
       contextNodeIds.add(current.parentId);
@@ -1430,8 +1430,6 @@ export function clampPanToScene(state, panX, panY, zoom) {
   const nextZoom = zoom || state.ui.zoom;
   const marginX = Math.max(160, rect.width * 0.5);
   const marginY = Math.max(140, rect.height * 0.5);
-  const contentWidth = (bounds.maxX - bounds.minX) * nextZoom;
-  const contentHeight = (bounds.maxY - bounds.minY) * nextZoom;
 
   let x = panX;
   let y = panY;

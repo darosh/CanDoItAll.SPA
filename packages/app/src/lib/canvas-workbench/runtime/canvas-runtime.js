@@ -233,6 +233,7 @@ export function renderToPngDataUrl(options) {
     throw new TypeError("renderToPngDataUrl options.draw must be synchronous.");
   }
 
+  // eslint-disable-next-line typescript/unbound-method -- existence check only, never invoked unbound
   requireFunction(canvas.toDataURL, "PNG export canvas.toDataURL");
   const dataUrl = canvas.toDataURL("image/png");
   if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:image/png;base64,")) {
@@ -248,6 +249,7 @@ export function downloadDataUrl(dataUrl, fileName) {
     throw new TypeError("downloadDataUrl fileName must be a non-empty string.");
   }
 
+  // eslint-disable-next-line no-control-regex -- control chars are the point: rejecting unsafe filenames
   if (fileName !== fileName.trim() || /[\\/\u0000-\u001f\u007f]/.test(fileName)) {
     throw new RangeError(
       "downloadDataUrl fileName cannot contain surrounding whitespace, path separators, or control characters.",
@@ -275,7 +277,9 @@ export function downloadDataUrl(dataUrl, fileName) {
     throw new Error("CanDoItAll.canvasRuntime could not create a download anchor.");
   }
 
+  // eslint-disable-next-line typescript/unbound-method -- existence check only, never invoked unbound
   requireFunction(anchor.click, "download anchor.click");
+  // eslint-disable-next-line typescript/unbound-method -- existence check only, never invoked unbound
   requireFunction(anchor.remove, "download anchor.remove");
   anchor.href = dataUrl;
   anchor.download = fileName;
@@ -544,11 +548,14 @@ export class PointerRouter {
       settings.onPointerCancel,
       "PointerRouter options.onPointerCancel",
     );
+    // eslint-disable-next-line typescript/unbound-method -- existence check only, never invoked unbound
     requireFunction(this._element.setPointerCapture, "PointerRouter element.setPointerCapture");
     requireFunction(
+      // eslint-disable-next-line typescript/unbound-method -- existence check only, never invoked unbound
       this._element.releasePointerCapture,
       "PointerRouter element.releasePointerCapture",
     );
+    // eslint-disable-next-line typescript/unbound-method -- existence check only, never invoked unbound
     requireFunction(this._element.hasPointerCapture, "PointerRouter element.hasPointerCapture");
 
     this._session = null;

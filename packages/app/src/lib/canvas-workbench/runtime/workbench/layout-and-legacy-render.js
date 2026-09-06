@@ -1983,7 +1983,7 @@ export function legacyBuildDiagnosticsSnapshot(state, bounds) {
   };
 }
 
-export function renderDiagnosticsOverlay(state, visibleNodes) {
+export function renderDiagnosticsOverlay(state, _visibleNodes) {
   if (!state?.diagnosticsPanel) {
     return;
   }

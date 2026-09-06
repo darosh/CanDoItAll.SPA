@@ -284,7 +284,7 @@ export function reconcileRetainedLayer(
   signatureSelector,
 ) {
   let changed = false;
-  for (const key of [...retained.keys()]) {
+  for (const key of retained.keys()) {
     if (!nextEntries.has(key)) {
       retained.delete(key);
       changed = true;
@@ -1711,7 +1711,6 @@ export function renderCanvasDecisionNode(
   meta,
 ) {
   const isSelected = state.selectedIds.has(node.id);
-  const paletteStyle = resolveCanvasNodePaletteStyle(node, accent, isSelected, state.colors);
   const colors = state.colors || {};
   const zoom = Math.max(state?.ui?.zoom || 1, 0.01);
   const centerX = hostBounds.left + hostBounds.width / 2;
