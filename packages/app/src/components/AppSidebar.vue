@@ -10,14 +10,20 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { markSidebarNavigation, useAppTabs } from "@/composables/useAppTabs";
 import { isNavItemActive } from "@/composables/useNavActive";
 import { navGroups, settingsLink } from "@/router/nav";
 
 const route = useRoute();
+const { tabsVisible } = useAppTabs();
 </script>
 
 <template>
-  <Sidebar collapsible="icon">
+  <Sidebar
+    collapsible="icon"
+    :class="tabsVisible ? 'top-9 h-[calc(100svh-2.25rem)]' : ''"
+    @click.capture="markSidebarNavigation"
+  >
     <SidebarContent>
       <NavGroupSection v-for="group in navGroups" :key="group.id" :group="group" />
     </SidebarContent>

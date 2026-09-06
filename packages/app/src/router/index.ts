@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 
+import { __handleRouteChange, consumeSidebarNavigationFlag } from "@/composables/useAppTabs";
 import { pageTitleOverride, resetBreadcrumbPatternOverrides } from "@/composables/usePageTitle";
 import { generatedRoutes } from "@/router/routes.generated";
 
@@ -117,7 +118,13 @@ export const router = createRouter({
   routes,
 });
 
+// Captured here (not in afterEach) so each navigation attempt consumes the
+// flag exactly once, right after it's set — an unrelated later navigation
+// never sees a stale value from an earlier click that didn't navigate.
+let navIsSidebarInitiated = false;
+
 router.beforeEach(() => {
+  navIsSidebarInitiated = consumeSidebarNavigationFlag();
   pageTitleOverride.value = undefined;
   resetBreadcrumbPatternOverrides();
 });
@@ -125,4 +132,5 @@ router.beforeEach(() => {
 router.afterEach((to) => {
   const title = (to.meta.title as string | undefined) ?? "CanDoItAll";
   document.title = `${title} · CanDoItAll`;
+  __handleRouteChange(to, navIsSidebarInitiated);
 });
