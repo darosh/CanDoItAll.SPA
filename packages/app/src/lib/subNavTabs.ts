@@ -33,6 +33,18 @@ export function workflowDetailTabs(workflowId: string) {
   ];
 }
 
+export function memoryProviderDetailTabs(memoryId: string) {
+  return [
+    { key: "overview", label: "Overview", to: `/memory/${memoryId}` },
+    { key: "operations", label: "Operations", to: `/memory/${memoryId}/operations` },
+    { key: "events", label: "Events", to: `/memory/${memoryId}/events` },
+    { key: "feedback", label: "Feedback", to: `/memory/${memoryId}/feedback` },
+    { key: "query", label: "Query", to: `/memory/${memoryId}/query` },
+    { key: "ingestion", label: "Ingestion", to: `/memory/${memoryId}/ingestion` },
+    { key: "provider-ui", label: "Provider UI", to: `/memory/${memoryId}/provider-ui` },
+  ];
+}
+
 export function collaborationTabs() {
   return [
     { key: "inbox", label: "Inbox", to: "/collaboration" },

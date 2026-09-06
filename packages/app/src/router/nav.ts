@@ -5,6 +5,7 @@
 import type { Component } from "vue";
 import {
   Bot,
+  Brain,
   Calendar,
   ChartLine,
   CirclePlay,
@@ -66,6 +67,7 @@ export const navGroups: NavGroup[] = [
       { title: "Workflows", to: "/workflows", icon: Workflow },
       { title: "Processes", to: "/processes", icon: ListTodo },
       { title: "Prompts", to: "/prompts", icon: Terminal },
+      { title: "Memory", to: "/memory", icon: Brain },
       { title: "Resources", to: "/resources", icon: Library },
       { title: "Plugins", to: "/plugins", icon: Puzzle },
       { title: "Scheduler", to: "/scheduler", icon: Calendar },
