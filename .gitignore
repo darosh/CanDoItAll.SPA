@@ -32,8 +32,8 @@ dist-ssr
 # AI agent worktrees
 .claude/worktrees/
 
-# Generated API client (regenerate with `pnpm generate` in packages/api-client-generator)
-packages/api-client/src/generated
+# API client generator intermediates (regenerate with `pnpm generate` in packages/api-client-generator);
+# packages/api-client/src (the generated client) is versioned, not ignored
 packages/api-client-generator/tsp
 packages/api-client-generator/spec/swagger.json
 packages/api-client-generator/spec/swagger.prepared.json

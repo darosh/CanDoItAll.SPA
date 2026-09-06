@@ -55,11 +55,19 @@ The backend emits OpenAPI 3.1 with several real spec bugs (missing path
 parameters, scalar schemas carrying a bare `default` that breaks TypeSpec's
 codegen, empty/typeless named schemas, duplicate/missing operation IDs) that trip
 up code generators. `packages/api-client-generator/scripts/prepare-spec.mjs` fixes
-these before handing the spec to `tsp-openapi3` → `@typespec/http-client-js`, which
-writes its output into `packages/api-client/src/generated`. Run `pnpm generate`
-inside `packages/api-client-generator` (or `packages/api-client`, which proxies to
-it) to refetch the spec and regenerate (requires the backend running locally at
-`http://localhost:5032`).
+these before handing the spec to `tsp-openapi3` → `@typespec/http-client-js`. The
+emitter writes its own nested package layout (`package.json`/`tsconfig.json` plus a
+`src/` subfolder) into `packages/api-client/src`; `scripts/flatten-generated-client.mjs`
+promotes that inner `src/` content up a level and drops the scaffolding, so the
+generated code lands as plain files directly under `packages/api-client/src` (no
+`generated/` subfolder, no hand-written wrapper — `package.json`'s `main`/`types`
+point straight at `src/index.ts`, and app code that needs a same-origin client
+factory builds it locally, e.g. `packages/app/src/lib/api-client.ts`).
+`packages/api-client/src` is committed — regenerate it with `pnpm generate` inside
+`packages/api-client-generator` (or `packages/api-client`, which proxies to it)
+whenever the backend's API surface
+changes (requires the backend running locally at `http://localhost:5032`), and
+commit the diff.
 
 Prompt-gallery endpoints used to document no response schema at all
 (`responses: { 200: {} }`), because their minimal-API handlers in
@@ -133,6 +141,7 @@ in this priority order:
   `packages/api-client-generator/scripts/fix-generated-client.mjs`
   patches every `options?.field &&` to `options?.field != null &&` in the
   generated operations file as a post-`client:compile` step (wired into the
-  `generate` script as `client:fix`), the same convention `prepare-spec.mjs`
-  uses on the input side. Re-run `pnpm client:fix` (or `pnpm generate`) after
-  regenerating if you ever hand-run `client:compile` alone.
+  `generate` script as `client:fix`, after `client:clean` → `client:compile` →
+  `client:flatten`), the same convention `prepare-spec.mjs` uses on the input
+  side. Re-run `pnpm client:flatten && pnpm client:fix` (or `pnpm generate`)
+  after regenerating if you ever hand-run `client:compile` alone.

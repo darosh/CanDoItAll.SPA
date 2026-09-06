@@ -5,9 +5,10 @@ export default defineConfig({
     "*": "vp check --fix",
   },
   fmt: {
-    // Fetched/generated OpenAPI specs, not hand-authored source — leave their
-    // formatting alone (see packages/api-client-generator/scripts/spec:fetch).
-    ignorePatterns: ["packages/api-client-generator/spec/**"],
+    // Fetched/generated OpenAPI specs and the generated API client, not hand-authored
+    // source — leave their formatting alone (see packages/api-client-generator's
+    // spec:fetch/generate scripts).
+    ignorePatterns: ["packages/api-client-generator/spec/**", "packages/api-client/src/**"],
   },
   lint: {
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
@@ -16,6 +17,9 @@ export default defineConfig({
     // can't resolve `.vue` imports (packages/app) — that's covered by `vue-tsc --build`
     // instead (see packages/app/package.json's `type-check`/`build` scripts).
     options: { typeAware: true, typeCheck: false },
+    // Generated API client (see packages/api-client-generator) — lint the hand-written
+    // consumers of it, not the emitter's own output.
+    ignorePatterns: ["packages/api-client/src/**"],
   },
   run: {
     cache: true,
