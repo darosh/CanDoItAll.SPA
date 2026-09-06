@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
 
-// import PageHeader from '@/components/PageHeader.vue'
+import PageHeader from "@/components/PageHeader.vue";
 import PageShell from "@/components/PageShell.vue";
 import SubNavTabs, { type SubNavTab } from "@/components/SubNavTabs.vue";
 
@@ -13,7 +13,7 @@ const params = Object.entries(route.params).filter(([, v]) => v !== undefined &&
 <template>
   <PageShell>
     <template #tabs><SubNavTabs v-if="tabs" :tabs="tabs" :selected="selected!" /></template>
-    <!--<PageHeader :title="title" />-->
+    <PageHeader :title="title" todo />
     <p v-if="params.length" class="text-sm text-muted-foreground">
       <span v-for="([key, value], i) in params" :key="key">
         <span v-if="i > 0">&middot; </span>{{ key }}:
