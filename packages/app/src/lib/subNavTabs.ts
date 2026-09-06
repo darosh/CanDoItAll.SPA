@@ -12,6 +12,8 @@ export function projectDetailTabs(projectId: string) {
     { key: "files", label: "Files", to: `/projects/${projectId}/files` },
     { key: "management", label: "Management", to: `/projects/${projectId}/management` },
     { key: "processes", label: "Processes", to: `/projects/${projectId}/processes` },
+    { key: "runs", label: "Live runs", to: `/projects/${projectId}/processes/runs` },
+    { key: "calendar", label: "Calendar", to: `/projects/${projectId}/calendar` },
   ];
 }
 

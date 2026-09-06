@@ -20,6 +20,13 @@ const routes = [
   ["workspace", "/projects/:projectId/files", "Project files", "ProjectFilesPage"],
   ["workspace", "/projects/:projectId/management", "Project management", "ProjectManagementPage"],
   ["workspace", "/projects/:projectId/processes", "Project processes", "ProjectProcessesPage"],
+  [
+    "workspace",
+    "/projects/:projectId/processes/runs",
+    "Project process runs",
+    "ProjectProcessRunsPage",
+  ],
+  ["workspace", "/projects/:projectId/calendar", "Project calendar", "ProjectCalendarPage"],
   ["workspace", "/collaboration/inbox", "Inbox", "CollaborationInboxPage"],
   ["workspace", "/collaboration/threads", "All threads", "CollaborationThreadsPage"],
   [

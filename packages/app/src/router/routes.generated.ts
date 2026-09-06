@@ -47,6 +47,18 @@ export const generatedRoutes: GeneratedRoute[] = [
   },
   {
     group: "workspace",
+    path: "/projects/:projectId/processes/runs",
+    title: "Project process runs",
+    component: () => import("@/pages/ProjectProcessRunsPage.vue"),
+  },
+  {
+    group: "workspace",
+    path: "/projects/:projectId/calendar",
+    title: "Project calendar",
+    component: () => import("@/pages/ProjectCalendarPage.vue"),
+  },
+  {
+    group: "workspace",
     path: "/collaboration",
     title: "Collaboration",
     component: () => import("@/pages/CollaborationInboxPage.vue"),

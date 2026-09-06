@@ -132,7 +132,7 @@ function normalizeOriginalUrl(url) {
   if (!url) return null;
   try {
     const u = new URL(url);
-    return u.pathname.replace(/\/+$/, "") || "/";
+    return u.pathname.replace(/\/+$/, "").toLowerCase() || "/";
   } catch {
     return url;
   }

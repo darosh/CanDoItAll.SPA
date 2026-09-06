@@ -3,6 +3,7 @@
  * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Processes/Pages/ProjectProcessesPage.razor
  * original URL     : http://localhost:5032/projects/:projectId/processes
  * URL              : http://localhost:5173/projects/:projectId/processes
+ * opens            : /projects/:projectId/processes/runs
  */
 
 import { useRoute } from "vue-router";
@@ -12,7 +13,8 @@ import { projectDetailTabs } from "@/lib/subNavTabs";
 
 const devNotes = `original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Processes/Pages/ProjectProcessesPage.razor
 original URL     : http://localhost:5032/projects/:projectId/processes
-URL              : http://localhost:5173/projects/:projectId/processes`;
+URL              : http://localhost:5173/projects/:projectId/processes
+opens            : /projects/:projectId/processes/runs`;
 
 const route = useRoute();
 </script>

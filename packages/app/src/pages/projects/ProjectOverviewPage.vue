@@ -9,6 +9,8 @@
  * opens            : /projects/:projectId/files
  * opens            : /projects/:projectId/management
  * opens            : /projects/:projectId/processes
+ * opens            : /projects/:projectId/processes/runs
+ * opens            : /projects/:projectId/calendar
  */
 
 import type {
