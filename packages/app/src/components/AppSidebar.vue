@@ -21,7 +21,7 @@ const { tabsVisible } = useAppTabs();
 <template>
   <Sidebar
     collapsible="icon"
-    :class="tabsVisible ? 'top-9 h-[calc(100svh-2.25rem)]' : ''"
+    :class="tabsVisible ? 'top-8 h-[calc(100svh-2rem)]' : ''"
     @click.capture="markSidebarNavigation"
   >
     <SidebarContent>
