@@ -1,0 +1,36 @@
+{
+  "name": "@candoitall/app",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vp dev",
+    "build": "vue-tsc --build && vp build",
+    "preview": "vp preview",
+    "test": "vp test run --passWithNoTests",
+    "type-check": "vue-tsc --build"
+  },
+  "dependencies": {
+    "@candoitall/api-client": "workspace:*",
+    "@lucide/vue": "catalog:",
+    "@vueuse/core": "catalog:",
+    "class-variance-authority": "catalog:",
+    "clsx": "catalog:",
+    "reka-ui": "catalog:",
+    "tailwind-merge": "catalog:",
+    "tailwindcss": "^4.3.3",
+    "vue": "^3.5.42",
+    "vue-router": "^5.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/tsconfig": "^0.9.1",
+    "tw-animate-css": "catalog:",
+    "typescript": "~5.9.2",
+    "vite": "catalog:",
+    "vite-plus": "catalog:",
+    "vue-tsc": "^3.3.7"
+  }
+}

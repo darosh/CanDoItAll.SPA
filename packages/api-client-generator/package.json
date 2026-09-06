@@ -1,0 +1,25 @@
+{
+  "name": "@candoitall/api-client-generator",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vp test run --passWithNoTests",
+    "spec:fetch": "curl -s http://localhost:5032/swagger/v1/swagger.json -o spec/swagger.json",
+    "spec:prepare": "node scripts/prepare-spec.mjs spec/swagger.json spec/swagger.prepared.json",
+    "spec:to-typespec": "tsp-openapi3 spec/swagger.prepared.json --output-dir tsp --namespace CanDoItAll",
+    "tsp:fix": "node scripts/fix-tsp.mjs tsp/main.tsp",
+    "tsp": "tsp compile --help",
+    "client:compile": "tsp compile tsp/main.tsp --emit @typespec/http-client-js --output-dir ../api-client/src/generated",
+    "client:fix": "node scripts/fix-generated-client.mjs ../api-client/src/generated/@typespec/http-client-js/src/api/canDoItAllClientOperations.ts ../api-client/src/generated/@typespec/http-client-js/src/models/internal/serializers.ts",
+    "generate": "pnpm spec:fetch && pnpm spec:prepare && pnpm spec:to-typespec && pnpm tsp:fix && pnpm client:compile && pnpm client:fix"
+  },
+  "devDependencies": {
+    "@typespec/compiler": "^1.15.0",
+    "@typespec/http": "^1.5.0",
+    "@typespec/http-client-js": "^0.16.1",
+    "@typespec/openapi": "^1.5.0",
+    "@typespec/openapi3": "^1.5.0",
+    "typescript": "~5.7.2"
+  }
+}

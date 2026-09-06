@@ -1,0 +1,28 @@
+{
+  "name": "@candoitall/monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ready": "vp check && vp run -r test && vp run -r build",
+    "check:fix": "vp check --fix",
+    "lint": "vp lint --format=agent",
+    "dev": "vp run @candoitall/app#dev",
+    "prepare": "vp config"
+  },
+  "devDependencies": {
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.25.0",
+      "onFail": "download"
+    }
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "packageManager": "pnpm@11.25.0"
+}

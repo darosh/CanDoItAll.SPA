@@ -1,0 +1,237 @@
+/* Declared on the package's own root wrapper classes, not :root — see the
+   matching comment in workbench/shell/01-layout-and-shell.css. */
+.cw-editor-shell,
+.cw-workbench-shell,
+.cdi-canvas-calendar-shell {
+  --cw-toolbar-border: var(--ui-canvas-toolbar-border, rgba(255, 255, 255, 0.48));
+  --cw-toolbar-bg: var(--ui-canvas-toolbar-bg, rgba(255, 255, 255, 0.62));
+  --cw-toolbar-shadow: var(--ui-canvas-toolbar-shadow, 0 18px 34px rgba(15, 23, 42, 0.12));
+  --cw-action-border: var(--ui-canvas-action-border, rgba(15, 23, 42, 0.08));
+  --cw-action-bg: var(--ui-canvas-action-bg, rgba(255, 255, 255, 0.92));
+  --cw-action-hover-shadow: var(--ui-canvas-action-hover-shadow, 0 12px 24px rgba(15, 23, 42, 0.1));
+  --cw-primary-action-start: var(--ui-canvas-primary-action-start, #0f172a);
+  --cw-primary-action-end: var(--ui-canvas-primary-action-end, #334155);
+  --cw-primary-action-text: var(--ui-canvas-badge-text, #fff);
+  --cw-primary-action-border: var(--ui-canvas-primary-action-border, rgba(255, 255, 255, 0.28));
+  --cw-ghost-action-text: var(--ui-canvas-ghost-action-text, rgba(255, 255, 255, 0.96));
+  --cw-zoom-rail-shadow: var(--ui-canvas-zoom-rail-shadow, rgba(109, 40, 217, 0.22));
+  --cw-zoom-slider-accent: var(--ui-canvas-zoom-slider-accent, #ddd6fe);
+  --cw-zoom-pill-bg: var(--ui-canvas-zoom-pill-bg, rgba(255, 255, 255, 0.16));
+  --cw-zoom-pill-text: var(--ui-canvas-badge-text, #fff);
+  --cw-create-rail-bg: var(--ui-canvas-create-rail-bg, rgba(255, 255, 255, 0.96));
+  --cw-create-rail-shadow: var(--ui-canvas-create-rail-shadow, 0 18px 32px rgba(15, 23, 42, 0.12));
+}
+
+.cw-toolbar {
+  position: absolute;
+  inset: 1rem 1rem auto 1rem;
+  z-index: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 1.3rem;
+  border: 1px solid var(--cw-toolbar-border);
+  background: var(--cw-toolbar-bg);
+  box-shadow: var(--cw-toolbar-shadow);
+  backdrop-filter: blur(14px);
+  pointer-events: auto;
+  flex-wrap: nowrap;
+}
+
+.cw-workbench-shell.is-maximized .cw-toolbar {
+  inset: 0 0 auto 0;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 0.8rem;
+  padding: 0.65rem 1rem 0.8rem;
+  border-radius: 0 0 1.25rem 1.25rem;
+  border-top: 0;
+}
+
+.cw-toolbar::-webkit-scrollbar {
+  display: none;
+}
+
+.cw-toolbar-group {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  flex-wrap: nowrap;
+  min-width: 0;
+  pointer-events: auto;
+}
+
+.cw-toolbar-group--left {
+  flex: 1 1 auto;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+}
+
+.cw-toolbar-group--utility {
+  flex: 0 0 auto;
+  justify-content: flex-end;
+}
+
+.cw-workbench-shell.is-maximized .cw-toolbar-group--left {
+  flex-basis: auto;
+}
+
+.cw-toolbar-group--left::-webkit-scrollbar {
+  display: none;
+}
+
+.cw-toolbar-action,
+.cw-button,
+.cw-list-item,
+.cw-context-menu__action {
+  border: 1px solid var(--cw-action-border);
+  border-radius: 999px;
+  background: var(--cw-action-bg);
+  color: var(--cw-text);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    border-color 120ms ease,
+    background 120ms ease;
+}
+
+.cw-toolbar-action:hover,
+.cw-button:hover,
+.cw-list-item:hover,
+.cw-context-menu__action:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--cw-action-hover-shadow);
+}
+
+.cw-toolbar-action {
+  min-height: 2.55rem;
+  padding: 0.78rem 1rem;
+}
+
+.cw-toolbar-action--icon {
+  width: 2.55rem;
+  min-width: 2.55rem;
+  min-height: 2.55rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cw-toolbar-action--icon .rz-icon,
+.cw-toolbar-action--icon .rz-icon-fallback {
+  font-size: 0.95rem;
+}
+
+.cw-toolbar-action--primary {
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, var(--cw-primary-action-start), var(--cw-primary-action-end));
+  color: var(--cw-primary-action-text);
+  font-size: 1.4rem;
+  border-color: var(--cw-primary-action-border);
+}
+
+.cw-toolbar-action--primary .rz-icon,
+.cw-toolbar-action--primary .rz-icon-fallback {
+  font-size: 1.4rem;
+}
+
+.cw-toolbar-action--ghost {
+  min-height: 2.2rem;
+  padding-inline: 0.75rem;
+  background: transparent;
+  border-color: transparent;
+  color: var(--cw-ghost-action-text);
+  box-shadow: none;
+}
+
+.cw-toolbar-action--icon.cw-toolbar-action--ghost {
+  min-width: 2.2rem;
+  width: 2.2rem;
+  min-height: 2.2rem;
+  padding: 0;
+}
+
+.cw-zoom-rail {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.22rem 0.3rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--cw-accent-purple-start), var(--cw-accent-purple-end));
+  box-shadow: 0 20px 32px var(--cw-zoom-rail-shadow);
+  min-width: 0;
+}
+
+.cw-zoom-slider {
+  width: clamp(4.5rem, 10vw, 8rem);
+  accent-color: var(--cw-zoom-slider-accent);
+}
+
+.cw-zoom-pill {
+  min-width: 3.25rem;
+  border-radius: 999px;
+  padding: 0.55rem 0.7rem;
+  background: var(--cw-zoom-pill-bg);
+  color: var(--cw-zoom-pill-text);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cw-create-rail {
+  position: absolute;
+  inset: 4.8rem auto auto 1.25rem;
+  z-index: 6;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 5.5rem));
+  gap: 0.65rem;
+  max-width: 11.7rem;
+  max-height: min(31rem, calc(100% - 7rem));
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.cw-create-rail__action {
+  width: 5.5rem;
+  height: 5rem;
+  border: 0;
+  clip-path: polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0 50%);
+  background: var(--cw-create-rail-bg);
+  color: var(--cw-text);
+  box-shadow: var(--cw-create-rail-shadow);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.cw-create-rail__action span {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--cw-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.cw-create-rail__action strong {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+}

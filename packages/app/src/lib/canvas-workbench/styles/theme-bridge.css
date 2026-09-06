@@ -1,0 +1,60 @@
+/*
+ * Bridges this app's shadcn-vue design tokens (packages/app/src/styles/index.css) onto the ported
+ * CanvasWorkbench engine's --ui-canvas-* custom properties, so the canvas reads as part of this
+ * app's neutral-gray system instead of the engine's own violet/mint default palette.
+ *
+ * The engine defines ~350 --ui-canvas-* variables (see runtime/workbench/01-foundation.js's
+ * canvasColorTokenMap and the workbench CSS files), each with its own hardcoded fallback baked
+ * in via `var(--ui-canvas-x, #fallback)` or the JS token map's `fallback` field — so leaving a
+ * token unmapped here is safe, not broken; it just keeps the engine's built-in color. This file
+ * intentionally maps only the highest-visibility surface/accent/tone tokens, not the full set.
+ */
+
+:root {
+  /* Primary accent (toolbar primary action, focus rings, default node accent) */
+  --ui-canvas-accent-violet: var(--primary);
+  --ui-canvas-primary-action-start: var(--primary);
+  --ui-canvas-primary-action-end: var(--primary);
+  --ui-canvas-primary-action-border: var(--primary);
+  --ui-canvas-tone-accent: var(--primary);
+  --ui-canvas-tone-accent-mid: var(--accent);
+  --ui-canvas-tone-accent-mid-text: var(--accent-foreground);
+
+  /* Status tones — reuse this app's success/warning/destructive scale instead of the engine's
+     mint/amber/red defaults, matching components/ui/badge's status variants. */
+  --ui-canvas-tone-mint: var(--success);
+  --ui-canvas-tone-mint-deep: var(--success);
+  --ui-canvas-tone-mint-text: var(--success-foreground);
+  --ui-canvas-node-success-surface-fill: var(--success);
+  --ui-canvas-node-success-icon-fill: var(--success-foreground);
+
+  --ui-canvas-tone-amber: var(--warning);
+  --ui-canvas-tone-amber-deep: var(--warning);
+  --ui-canvas-tone-amber-text: var(--warning-foreground);
+  --ui-canvas-node-warning-surface-fill: var(--warning);
+  --ui-canvas-node-warning-icon-fill: var(--warning-foreground);
+
+  --ui-canvas-tone-red: var(--destructive);
+  --ui-canvas-tone-red-deep: var(--destructive);
+  --ui-canvas-tone-danger-strong: var(--destructive);
+  --ui-canvas-tone-danger-text: var(--destructive-foreground);
+  --ui-canvas-node-danger-surface-fill: var(--destructive);
+  --ui-canvas-node-danger-icon-fill: var(--destructive-foreground);
+
+  /* Chrome surfaces: toolbar, panels, canvas background wash */
+  --ui-canvas-toolbar-bg: var(--card);
+  --ui-canvas-toolbar-border: var(--border);
+  --ui-canvas-panel: var(--card);
+  --ui-canvas-border-soft: var(--border);
+  --ui-canvas-muted: var(--muted-foreground);
+  --ui-canvas-text: var(--foreground);
+  --ui-canvas-bg-start: var(--background);
+  --ui-canvas-bg-mid: var(--background);
+  --ui-canvas-bg-end: var(--muted);
+
+  /* Neutral node family (the default/most common node style) */
+  --ui-canvas-node-neutral-surface-fill: var(--card);
+  --ui-canvas-node-neutral-surface-stroke: var(--border);
+  --ui-canvas-node-neutral-title-text: var(--foreground);
+  --ui-canvas-node-neutral-label-text: var(--muted-foreground);
+}
