@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import type {
-  ApiAccessStatus,
-  ApiTokenIssueRequest,
-  ApiTokenIssueResult,
-} from "@candoitall/api-client";
+import type { ApiAccessStatus, ApiTokenIssueResult } from "@candoitall/api-client";
 import { onMounted, ref } from "vue";
 
 import PageShell from "@/components/PageShell.vue";
@@ -22,9 +18,16 @@ const issued = ref<ApiTokenIssueResult | null>(null);
 const error = ref<string | null>(null);
 const loading = ref(true);
 const issuing = ref(false);
-const token = ref<ApiTokenIssueRequest>({
+interface ApiTokenIssueForm {
+  subject: string;
+  displayName: string;
+  lifetimeMinutes: number;
+  scopes: string[];
+}
+const token = ref<ApiTokenIssueForm>({
   subject: "api-client",
   displayName: "API client",
+  lifetimeMinutes: 0,
   scopes: ["api"],
 });
 async function load() {
@@ -32,7 +35,7 @@ async function load() {
   error.value = null;
   try {
     status.value = await apiClient.getApiAccessStatus();
-    token.value.lifetimeMinutes = status.value.defaultTokenLifetimeMinutes;
+    token.value.lifetimeMinutes = Number(status.value.defaultTokenLifetimeMinutes);
   } catch (e) {
     error.value = e instanceof Error ? e.message : "API access status could not be loaded.";
   } finally {

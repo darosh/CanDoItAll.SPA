@@ -13,7 +13,7 @@
     "client:clean": "rm -rf ../api-client/src",
     "client:compile": "tsp compile tsp/main.tsp --emit @typespec/http-client-js --option @typespec/http-client-js.emitter-output-dir={project-root}/../api-client/src",
     "client:flatten": "node scripts/flatten-generated-client.mjs ../api-client/src",
-    "client:fix": "node scripts/fix-generated-client.mjs ../api-client/src/api/canDoItAllClientOperations.ts ../api-client/src/models/internal/serializers.ts",
+    "client:fix": "node scripts/fix-generated-client.mjs ../api-client/src/api/canDoItAllClientOperations.ts ../api-client/src/models/internal/serializers.ts ../api-client/src/models/models.ts",
     "generate": "pnpm spec:fetch && pnpm spec:prepare && pnpm spec:to-typespec && pnpm tsp:fix && pnpm client:clean && pnpm client:compile && pnpm client:flatten && pnpm client:fix"
   },
   "devDependencies": {

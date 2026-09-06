@@ -1703,7 +1703,7 @@ export type WorkflowLaunchOrigin = {
   $origin: "process-assignment"
 } & WorkflowLaunchOriginProcessAssignment;
 export interface WorkflowLaunchOriginApi {
-  $origin?: "api";
+  $origin: "api";
   actor: WorkflowLaunchActor;
   kind?: number;
   correlationId: WorkflowLaunchCorrelationId;
@@ -1718,13 +1718,13 @@ export interface WorkflowLaunchCorrelationId {
   value: string;
 }
 export interface WorkflowLaunchOriginPreview {
-  $origin?: "preview";
+  $origin: "preview";
   actor: WorkflowLaunchActor;
   kind?: number;
   correlationId: WorkflowLaunchCorrelationId;
 }
 export interface WorkflowLaunchOriginSchedulerPlanRun {
-  $origin?: "scheduler-plan-run";
+  $origin: "scheduler-plan-run";
   planId: string;
   planRunId: string;
   fireId: WorkflowSchedulerFireId;
@@ -1736,7 +1736,7 @@ export interface WorkflowSchedulerFireId {
   value: string;
 }
 export interface WorkflowLaunchOriginProjectStructureNode {
-  $origin?: "project-structure-node";
+  $origin: "project-structure-node";
   projectId: string;
   nodeId: WorkflowProjectStructureNodeId;
   requestingActor: WorkflowLaunchActor;
@@ -1751,7 +1751,7 @@ export interface WorkflowLaunchSessionId {
   value: string;
 }
 export interface WorkflowLaunchOriginAgentRuntimeInvocation {
-  $origin?: "agent-runtime-invocation";
+  $origin: "agent-runtime-invocation";
   agent: WorkflowLaunchActor;
   runtimeSessionId: WorkflowLaunchSessionId;
   purpose: string;
@@ -1759,7 +1759,7 @@ export interface WorkflowLaunchOriginAgentRuntimeInvocation {
   correlationId: WorkflowLaunchCorrelationId;
 }
 export interface WorkflowLaunchOriginProcessAssignment {
-  $origin?: "process-assignment";
+  $origin: "process-assignment";
   processRunId: string;
   assignmentId: string;
   kind?: number;

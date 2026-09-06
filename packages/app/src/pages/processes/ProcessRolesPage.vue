@@ -3,7 +3,7 @@ import type { ProcessDefinitionRoleEditorProjection } from "@candoitall/api-clie
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
-import PageHeader from "@/components/PageHeader.vue";
+// import PageHeader from "@/components/PageHeader.vue";
 import PageShell from "@/components/PageShell.vue";
 import SubNavTabs from "@/components/SubNavTabs.vue";
 import { Badge } from "@/components/ui/badge";

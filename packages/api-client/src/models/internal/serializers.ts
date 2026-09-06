@@ -457,15 +457,27 @@ export function decodeBase64(value: string): Uint8Array | undefined {
   const base64 = value.replace(/-/g, '+').replace(/_/g, '/')
     .padEnd(value.length + (4 - (value.length % 4)) % 4, '=');
 
-  return new Uint8Array(Buffer.from(base64, 'base64'));
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
 }export function encodeUint8Array(
   value: Uint8Array | undefined | null,
-  encoding: BufferEncoding,
+  encoding: "base64" | "base64url" = "base64",
 ): string | undefined {
   if (!value) {
     return value as any;
   }
-  return Buffer.from(value).toString(encoding);
+  let binary = '';
+  for (let i = 0; i < value.length; i++) {
+    binary += String.fromCharCode(value[i]);
+  }
+  const base64 = btoa(binary);
+  return encoding === "base64url"
+    ? base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+    : base64;
 }export function dateDeserializer(date?: string | null): Date {
   if (!date) {
     return date as any;

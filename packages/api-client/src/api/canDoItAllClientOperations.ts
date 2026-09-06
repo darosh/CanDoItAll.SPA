@@ -1,5 +1,5 @@
 import { parse } from "uri-template";
-import { CanDoItAllClientContext } from "./canDoItAllClientContext.js";
+import type { CanDoItAllClientContext } from "./canDoItAllClientContext.js";
 import { createRestError } from "../helpers/error.js";
 import type { OperationOptions } from "../helpers/interfaces.js";
 import {
@@ -287,7 +287,7 @@ import {
   type CapacityBlockSaveApiRequest,
   type ChatSessionRenameApiRequest,
   type CreateAgentRecruitingInterviewCommand,
-  CreateLlmChatConversationApiRequest,
+  type CreateLlmChatConversationApiRequest,
   type HostCapabilitySnapshot,
   type IFormFile,
   type LifecycleTaskSaveApiRequest,
@@ -298,8 +298,8 @@ import {
   type LlmChatConversationApiResponse,
   type LlmChatDefinitionApiResponse,
   type LlmChatDefinitionEditorApiResponse,
-  LlmChatDefinitionMutationApiRequest,
-  LlmChatExpectedConcurrencyApiRequest,
+  type LlmChatDefinitionMutationApiRequest,
+  type LlmChatExpectedConcurrencyApiRequest,
   type LlmChatOperationApiResponse,
   type LlmChatProviderOptionApiResponse,
   type MemoryEditorModel,
@@ -406,8 +406,8 @@ import {
   type RecruitmentConversionApiRequest,
   type RecruitmentInterviewSaveApiRequest,
   type RecruitmentSupportAssignmentsSaveApiRequest,
-  RenameLlmChatConversationApiRequest,
-  SendLlmChatTurnApiRequest,
+  type RenameLlmChatConversationApiRequest,
+  type SendLlmChatTurnApiRequest,
   type SkillDefinitionSaveApiRequest,
   type WorkflowCatalogItem,
   type WorkflowDefinition,
