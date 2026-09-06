@@ -15,23 +15,23 @@ export const generatedRoutes: GeneratedRoute[] = [
     component: () => import("@/pages/DashboardPage.vue"),
   },
   { group: "workspace", path: "/projects", title: "Projects", component: null },
-  { group: "workspace", path: "/projects/:projectId", title: "Project details", component: null },
+  { group: "workspace", path: "/projects/:projectId", title: "Details", component: null },
   {
     group: "workspace",
     path: "/projects/:projectId/structure",
-    title: "Project structure",
+    title: "Structure",
     component: () => import("@/pages/ProjectStructurePage.vue"),
   },
   {
     group: "workspace",
     path: "/projects/:projectId/gantt",
-    title: "Project gantt",
+    title: "Gantt",
     component: () => import("@/pages/ProjectGanttPage.vue"),
   },
   {
     group: "workspace",
     path: "/projects/:projectId/files",
-    title: "Project files",
+    title: "Files",
     component: () => import("@/pages/ProjectFilesPage.vue"),
   },
   {
@@ -43,7 +43,7 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     group: "workspace",
     path: "/projects/:projectId/processes",
-    title: "Project processes",
+    title: "Processes",
     component: () => import("@/pages/ProjectProcessesPage.vue"),
   },
   {
@@ -55,7 +55,7 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     group: "workspace",
     path: "/projects/:projectId/calendar",
-    title: "Project calendar",
+    title: "Calendar",
     component: () => import("@/pages/ProjectCalendarPage.vue"),
   },
   {
@@ -127,7 +127,7 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     group: "workspace",
     path: "/crm-hr/workforce/:partyId",
-    title: "Workforce profile",
+    title: "Profile",
     component: () => import("@/pages/CrmWorkforceProfilePage.vue"),
   },
   {
@@ -145,13 +145,13 @@ export const generatedRoutes: GeneratedRoute[] = [
   {
     group: "workspace",
     path: "/crm-hr/agents",
-    title: "Business-facing agents",
+    title: "Business agents",
     component: () => import("@/pages/CrmAgentsPage.vue"),
   },
   {
     group: "workspace",
     path: "/crm-hr/agents/:partyId",
-    title: "Business-facing agent detail",
+    title: "Business agent detail",
     component: () => import("@/pages/CrmAgentDetailPage.vue"),
   },
   {
