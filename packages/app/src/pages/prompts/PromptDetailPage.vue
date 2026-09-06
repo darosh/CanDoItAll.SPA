@@ -1,4 +1,11 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Prompts/Pages/PromptGalleryPage.razor
+ * original URL     : http://localhost:5032/prompt-gallery
+ * original trigger : select or open a prompt from the gallery
+ * URL              : http://localhost:5173/prompts/:promptId
+ */
+
 import type { PromptGalleryVersionInfo, PromptProviderModel } from "@candoitall/api-client";
 import { Archive, ArchiveRestore, Plus, X } from "@lucide/vue";
 import { computed, onMounted, reactive, ref } from "vue";

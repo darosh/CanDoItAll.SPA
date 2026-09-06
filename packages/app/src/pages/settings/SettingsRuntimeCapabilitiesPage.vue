@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/App/CanDoItAll.Web/Components/Pages/RuntimeCapabilities.razor
+ * original URL     : http://localhost:5032/settings/runtime-capabilities
+ * URL              : http://localhost:5173/settings/runtime-capabilities
+ */
+
 import type { HostCapabilityAvailability, HostCapabilityDescriptor } from "@candoitall/api-client";
 import { RefreshCw } from "@lucide/vue";
 import { onMounted, ref } from "vue";

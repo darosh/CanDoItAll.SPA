@@ -1,4 +1,11 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Processes/Pages/ProcessesPage.razor
+ * original URL     : http://localhost:5032/processes
+ * original trigger : select a definition, then open its roles
+ * URL              : http://localhost:5173/processes/:processId/roles
+ */
+
 import type { ProcessDefinitionRoleEditorProjection } from "@candoitall/api-client";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";

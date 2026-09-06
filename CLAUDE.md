@@ -38,6 +38,43 @@ definitions), **Settings** (pinned). Adding a route means updating the table in
 `generate-routes.mjs` and re-running it, not hand-writing a page file — every route
 except the hand-built Prompt Gallery pages is a generated stub with just a title.
 
+### `*Page.vue` origin header
+
+Every `*Page.vue` file under `packages/app/src/pages/` starts its `<script setup
+lang="ts">` block with a doc comment tracing it back to the original `.NET`/Blazor
+page it reimplements, and to itself:
+
+```ts
+/**
+ * original source  : <github blob URL to the .razor file, fyziktom/CanDoItAll @ main>
+ * original URL     : <http://localhost:5032/... — reaches the original page directly>
+ * original trigger : <only if the original URL doesn't land on the equivalent view —
+ *                      e.g. the SPA route corresponds to one tab inside a bigger
+ *                      Blazor page, or a dialog opened from elsewhere>
+ * URL              : <http://localhost:5173/... — this page's own SPA route>
+ * trigger          : <only if navigating to URL above doesn't land directly here —
+ *                      rare on the SPA side, since every route is directly addressable>
+ */
+```
+
+Omit any line with no value (e.g. a page with no real original-app counterpart omits
+`original source`/`original URL` entirely; a page reached by clicking through a list
+rather than a direct link needs `trigger`). `original` fields point at
+`https://github.com/fyziktom/CanDoItAll` (main branch) — the sibling `.NET` repo this
+SPA reimplements, checked out locally as `CanDoItAll` next to this repo. Many SPA
+routes correspond to a tab inside one large original Blazor page rather than a
+distinct original route (the original app used in-page tabs where this rewrite uses
+real URLs) — `docs/navigation-proposal-menu.md` in that sibling repo has the detailed
+group/route/sublink mapping and is the first place to check when filling this header
+in for a new page, before grepping the original repo's `.razor` files directly for
+`@page` routes and tab structure.
+
+**When porting a page's actual behavior** (not just adding the stub header), read
+this comment first — `original source` is the fastest way to find the exact Blazor
+component and Razor/C# code to port from, and `original trigger` tells you which tab
+or dialog inside that component holds the logic you need, so you don't have to
+re-derive the mapping from `navigation-proposal-menu.md` each time.
+
 ### Design system
 
 Lean, gray, ERP-shaped chrome: near-zero-chroma neutrals for all surfaces

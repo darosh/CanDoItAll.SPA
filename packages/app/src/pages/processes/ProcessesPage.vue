@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Processes/Pages/ProcessesPage.razor
+ * original URL     : http://localhost:5032/processes
+ * URL              : http://localhost:5173/processes
+ */
+
 import { onMounted, reactive, ref, watch } from "vue";
 import { RouterLink } from "vue-router";
 

@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Prompts/Pages/PromptGalleryPage.razor
+ * original URL     : http://localhost:5032/prompt-gallery
+ * URL              : http://localhost:5173/prompts
+ */
+
 import { Star } from "@lucide/vue";
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { RouterLink } from "vue-router";

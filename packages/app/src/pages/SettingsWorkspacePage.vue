@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Workspace/Pages/SettingsPage.razor
+ * original URL     : http://localhost:5032/settings
+ * URL              : http://localhost:5173/settings/workspace
+ */
+
 import type { WorkspaceSettingsModel } from "@candoitall/api-client";
 import { onMounted, ref } from "vue";
 

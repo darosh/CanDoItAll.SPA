@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Workbench/Pages/ProjectStructurePage.razor
+ * original URL     : http://localhost:5032/projects/:projectId/structure
+ * URL              : http://localhost:5173/projects/:projectId/structure
+ */
+
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import SubNavTabs from "@/components/SubNavTabs.vue";

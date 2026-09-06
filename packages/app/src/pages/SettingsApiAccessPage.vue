@@ -1,4 +1,11 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Workspace/Pages/SettingsPage.razor
+ * original URL     : http://localhost:5032/settings
+ * original trigger : click the API access tab
+ * URL              : http://localhost:5173/settings/api-access
+ */
+
 import type { ApiAccessStatus, ApiTokenIssueResult } from "@candoitall/api-client";
 import { onMounted, ref } from "vue";
 

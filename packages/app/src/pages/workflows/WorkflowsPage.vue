@@ -1,4 +1,11 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.AgentFramework/Pages/WorkflowsPage.razor
+ * original URL     : http://localhost:5032/agents/workflows
+ * original trigger : click the Workflows tab (also absorbs the Dashboard tab as the landing view)
+ * URL              : http://localhost:5173/workflows
+ */
+
 import type {
   WorkflowCatalogItem,
   WorkflowDefinitionDetail,

@@ -1,4 +1,11 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Processes/Pages/ProcessesPage.razor
+ * original URL     : http://localhost:5032/processes
+ * original trigger : select a definition, then open its step editor
+ * URL              : http://localhost:5173/processes/:processId/design
+ */
+
 import type {
   ProcessDefinitionStepDraftProjection,
   ProcessDefinitionStepEditorProjection,

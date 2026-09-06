@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/App/CanDoItAll.Web/Components/Layout/MainLayoutDatabaseDialog.razor
+ * original trigger : open the database flyout from the shell's bottom utility bar (any page)
+ * URL              : http://localhost:5173/settings/database
+ */
+
 import StubPage from "@/components/StubPage.vue";
 import { settingsTabs } from "@/lib/subNavTabs";
 </script>

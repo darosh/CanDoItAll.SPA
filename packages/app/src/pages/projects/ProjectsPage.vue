@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * original source  : https://github.com/fyziktom/CanDoItAll/blob/main/src/Modules/CanDoItAll.Modules.Projects/Pages/ProjectsPage.razor
+ * original URL     : http://localhost:5032/projects
+ * URL              : http://localhost:5173/projects
+ */
+
 import type { ProjectSummary } from "@candoitall/api-client";
 import { Plus } from "@lucide/vue";
 import { computed, onMounted, reactive, ref } from "vue";
