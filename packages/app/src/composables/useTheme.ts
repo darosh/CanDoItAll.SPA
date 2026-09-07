@@ -14,6 +14,7 @@ const theme = ref<Theme>(getInitialTheme());
 
 watchEffect(() => {
   document.documentElement.classList.toggle("dark", theme.value === "dark");
+  document.documentElement.dataset["uiTheme"] = theme.value === "dark" ? "dark" : "light";
   localStorage.setItem(STORAGE_KEY, theme.value);
 });
 
