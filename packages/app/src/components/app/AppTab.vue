@@ -57,7 +57,7 @@ const breadcrumbTrail = computed(() =>
           {{ tab.title }}
         </span>
       </TooltipTrigger>
-      <TooltipContent side="bottom">{{ breadcrumbTrail }}</TooltipContent>
+      <TooltipContent side="bottom" class="z-[1000]">{{ breadcrumbTrail }}</TooltipContent>
     </Tooltip>
 
     <Button
