@@ -60,6 +60,12 @@ const handBuilt: RouteRecordRaw[] = [
     meta: { title: "Project overview", dynamicTitle: true },
   },
   {
+    path: "/projects/:projectId/structure",
+    name: "project-structure",
+    component: () => import("@/pages/project-structure/ProjectStructurePage.vue"),
+    meta: { title: "Structure" },
+  },
+  {
     path: "/workflows",
     name: "workflows",
     component: () => import("@/pages/workflows/WorkflowsPage.vue"),
@@ -70,6 +76,12 @@ const handBuilt: RouteRecordRaw[] = [
     name: "workflow-design",
     component: () => import("@/pages/workflows/WorkflowDesignerPage.vue"),
     meta: { title: "Workflow designer", dynamicTitle: true },
+  },
+  {
+    path: "/settings",
+    name: "settings-workspace",
+    component: () => import("@/pages/settings/SettingsWorkspacePage.vue"),
+    meta: { title: "Settings" },
   },
   {
     path: "/settings/runtime-capabilities",

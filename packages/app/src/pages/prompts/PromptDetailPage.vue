@@ -11,8 +11,8 @@ import { Archive, ArchiveRestore, Plus, X } from "@lucide/vue";
 import { computed, onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import PageHeader from "@/components/PageHeader.vue";
-import PageShell from "@/components/PageShell.vue";
+import PageHeader from "@/components/shared/PageHeader.vue";
+import PageShell from "@/components/shared/PageShell.vue";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

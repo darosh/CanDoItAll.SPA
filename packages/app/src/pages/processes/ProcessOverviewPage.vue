@@ -10,9 +10,9 @@ import type { ProcessDefinitionEditorProjection } from "@candoitall/api-client";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
-import PageHeader from "@/components/PageHeader.vue";
-import PageShell from "@/components/PageShell.vue";
-import SubNavTabs from "@/components/SubNavTabs.vue";
+import PageHeader from "@/components/shared/PageHeader.vue";
+import PageShell from "@/components/shared/PageShell.vue";
+import SubNavTabs from "@/components/shared/SubNavTabs.vue";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 

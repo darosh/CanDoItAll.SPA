@@ -15,8 +15,8 @@
 import type { WorkspaceSettingsModel } from "@candoitall/api-client";
 import { onMounted, ref } from "vue";
 
-import PageShell from "@/components/PageShell.vue";
-import SubNavTabs from "@/components/SubNavTabs.vue";
+import PageShell from "@/components/shared/PageShell.vue";
+import SubNavTabs from "@/components/shared/SubNavTabs.vue";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

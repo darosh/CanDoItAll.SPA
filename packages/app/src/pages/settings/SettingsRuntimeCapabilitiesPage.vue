@@ -9,8 +9,8 @@ import type { HostCapabilityAvailability, HostCapabilityDescriptor } from "@cand
 import { RefreshCw } from "@lucide/vue";
 import { onMounted, ref } from "vue";
 
-import PageShell from "@/components/PageShell.vue";
-import SubNavTabs from "@/components/SubNavTabs.vue";
+import PageShell from "@/components/shared/PageShell.vue";
+import SubNavTabs from "@/components/shared/SubNavTabs.vue";
 import { Badge, type BadgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

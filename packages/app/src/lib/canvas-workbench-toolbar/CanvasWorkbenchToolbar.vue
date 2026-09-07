@@ -54,7 +54,7 @@ const isMaximized = ref(false);
 function toggleMaximize(): void {
   isMaximized.value = !isMaximized.value;
 }
-// AppTabs (packages/app/src/components/AppTabs.vue) is a fixed `h-8` bar the maximized block
+// AppTabs (packages/app/src/components/app/AppTabs.vue) is a fixed `h-8` bar the maximized block
 // must not cover — `useAppTabs()` is a module-scoped singleton, so its `tabsVisible` ref reflects
 // the live app-wide toggle without any prop drilling from AppShell.
 const { tabsVisible } = useAppTabs();

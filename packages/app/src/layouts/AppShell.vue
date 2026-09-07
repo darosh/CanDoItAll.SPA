@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Moon, PanelTop, Sun } from "@lucide/vue";
 import { TooltipProvider } from "reka-ui";
-import AppSidebar from "@/components/AppSidebar.vue";
-import AppTabs from "@/components/AppTabs.vue";
+import AppSidebar from "@/components/app/AppSidebar.vue";
+import AppTabs from "@/components/app/AppTabs.vue";
 import {
   Breadcrumb,
   BreadcrumbItem,

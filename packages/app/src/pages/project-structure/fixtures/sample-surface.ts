@@ -7,7 +7,7 @@ import type {
 // Hand-written fixture surface covering the node families/shapes and link kinds the ported
 // CanvasWorkbench engine renders, for local dev verification via `vp run dev` without needing
 // the .NET backend running. Keep this in the repo as a permanent regression fixture — see
-// packages/app/src/pages/ProjectStructurePage.vue and the port plan's phase 1-3 checkpoints.
+// packages/app/src/pages/project-structure/ProjectStructurePage.vue and the port plan's phase 1-3 checkpoints.
 
 function node(
   partial: Partial<CanvasWorkbenchNode> & Pick<CanvasWorkbenchNode, "id" | "title" | "x" | "y">,

@@ -172,15 +172,17 @@ const handBuilt = new Set([
   "/projects",
   "/projects/new",
   "/projects/:projectId",
+  "/projects/:projectId/structure",
   "/workflows",
   "/workflows/:workflowId/design",
+  "/settings",
   "/settings/runtime-capabilities",
   "/settings/api-access",
 ]);
 
 for (const [, path, title, componentName] of routes) {
   if (handBuilt.has(path)) continue;
-  const file = join(pagesDir, `${componentName}.vue`);
+  const file = join(pagesDir, "stubs", `${componentName}.vue`);
   if (existsSync(file)) continue; // never clobber a page that's been fleshed out
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(
@@ -198,7 +200,7 @@ import StubPage from "@/components/StubPage.vue";
 
 const manifestLines = routes
   .map(([group, path, title, componentName]) => {
-    const importPath = handBuilt.has(path) ? null : `@/pages/${componentName}.vue`;
+    const importPath = handBuilt.has(path) ? null : `@/pages/stubs/${componentName}.vue`;
     return `  { group: ${JSON.stringify(group)}, path: ${JSON.stringify(path)}, title: ${JSON.stringify(title)}, component: ${
       importPath ? `() => import(${JSON.stringify(importPath)})` : "null"
     } },`;

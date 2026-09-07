@@ -16,7 +16,7 @@ import { Boxes, CirclePlus, ExternalLink, FileStack, Search, Workflow } from "@l
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import PageShell from "@/components/PageShell.vue";
+import PageShell from "@/components/shared/PageShell.vue";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

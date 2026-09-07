@@ -29,7 +29,7 @@ import type {
   CanvasWorkbenchSurfaceInput,
   CanvasWorkbenchUiStateInput,
 } from "@candoitall/canvas-workbench";
-import SubNavTabs from "@/components/SubNavTabs.vue";
+import SubNavTabs from "@/components/shared/SubNavTabs.vue";
 import { workflowDetailTabs } from "@/lib/subNavTabs";
 
 import {
@@ -51,13 +51,13 @@ import {
   validateDraftWorkflowDefinition,
   validateSavedWorkflowDefinition,
 } from "./api";
-import DefinitionTab from "./inspector/DefinitionTab.vue";
-import NodeSetupTab from "./inspector/NodeSetupTab.vue";
-import RoutesTab from "./inspector/RoutesTab.vue";
-import PreviewTab from "./inspector/PreviewTab.vue";
-import ToolboxWindow from "./ToolboxWindow.vue";
-import SelectionWindow from "./SelectionWindow.vue";
-import ComponentsWindow from "./ComponentsWindow.vue";
+import DefinitionTab from "./components/inspector/DefinitionTab.vue";
+import NodeSetupTab from "./components/inspector/NodeSetupTab.vue";
+import RoutesTab from "./components/inspector/RoutesTab.vue";
+import PreviewTab from "./components/inspector/PreviewTab.vue";
+import ToolboxWindow from "./components/ToolboxWindow.vue";
+import SelectionWindow from "./components/SelectionWindow.vue";
+import ComponentsWindow from "./components/ComponentsWindow.vue";
 import { WorkflowNodeKind } from "./types";
 import type { WorkflowValidationResult } from "@candoitall/api-client";
 

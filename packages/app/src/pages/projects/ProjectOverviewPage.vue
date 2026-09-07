@@ -24,9 +24,9 @@ import { Plus, Trash2 } from "@lucide/vue";
 import { computed, onMounted, reactive, ref } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
-import PageHeader from "@/components/PageHeader.vue";
-import PageShell from "@/components/PageShell.vue";
-import SubNavTabs from "@/components/SubNavTabs.vue";
+import PageHeader from "@/components/shared/PageHeader.vue";
+import PageShell from "@/components/shared/PageShell.vue";
+import SubNavTabs from "@/components/shared/SubNavTabs.vue";
 import {
   AlertDialog,
   AlertDialogAction,

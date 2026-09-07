@@ -38,6 +38,31 @@ definitions), **Settings** (pinned). Adding a route means updating the table in
 `generate-routes.mjs` and re-running it, not hand-writing a page file — every route
 except the hand-built Prompt Gallery pages is a generated stub with just a title.
 
+### Pages and components organization
+
+`packages/app/src/pages/stubs/` holds every generator-produced stub page
+(the write target and import path `scripts/generate-routes.mjs` uses for any
+route not in its `handBuilt` set) — a hand-built page never lives there.
+
+Inside a `pages/<feature>/` folder (e.g. `processes/`, `projects/`, `prompts/`,
+`settings/`, `workflows/`), only `*Page.vue` files may sit at the folder root.
+Feature-specific non-page `.vue` files (dialogs, pickers, toolbox/inspector
+panels, etc.) go in `pages/<feature>/components/` instead — see
+`pages/workflows/components/` (including its `inspector/` subfolder) for the
+pattern. `.ts` helpers may stay at the feature-folder root if the page itself
+consumes them directly, or move into `components/` alongside the
+sub-components that exclusively consume them.
+
+`packages/app/src/components/` is split by role:
+
+- `ui/` — shadcn-vue primitives only (managed via the `unovue/shadcn-vue` CLI
+  and skill; don't hand-restructure).
+- `app/` — app-shell chrome wired into `layouts/AppShell.vue` (sidebar, tab
+  bar, nav group rendering); not page-specific.
+- `shared/` — generic page-composition primitives used across many `pages/`
+  folders but not app-shell-specific (page header/shell wrappers, sub-nav
+  tabs, the dev-notes box, the stub-page template component).
+
 ### `*Page.vue` origin header
 
 Every `*Page.vue` file under `packages/app/src/pages/` starts its `<script setup
