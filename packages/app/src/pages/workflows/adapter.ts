@@ -5,12 +5,12 @@ import type {
   WorkflowPort,
 } from "@candoitall/api-client";
 import type {
-  CanvasWorkbenchLink,
-  CanvasWorkbenchNode,
+  CanvasWorkbenchLinkInput,
+  CanvasWorkbenchNodeInput,
   CanvasWorkbenchPort,
-  CanvasWorkbenchSurface,
-  CanvasWorkbenchUiState,
-} from "@/lib/canvas-workbench/types";
+  CanvasWorkbenchSurfaceInput,
+  CanvasWorkbenchUiStateInput,
+} from "@candoitall/canvas-workbench";
 import { buildNodeContextActions, buildQuickCreateActions } from "./actionCatalog";
 import {
   resolveEdgeVisualProfile,
@@ -50,7 +50,7 @@ function mapPort(port: WorkflowPort): CanvasWorkbenchPort {
   };
 }
 
-function mapNode(node: WorkflowNode): CanvasWorkbenchNode {
+function mapNode(node: WorkflowNode): CanvasWorkbenchNodeInput {
   const visualProfile = resolveNodeVisualProfile(node.kind);
   const inputPorts = node.ports.filter((port) => port.direction === WorkflowPortDirection.Input);
   const outputPorts = node.ports.filter((port) => port.direction === WorkflowPortDirection.Output);
@@ -109,7 +109,7 @@ function mapNode(node: WorkflowNode): CanvasWorkbenchNode {
   };
 }
 
-function mapLink(edge: WorkflowEdge): CanvasWorkbenchLink {
+function mapLink(edge: WorkflowEdge): CanvasWorkbenchLinkInput {
   const visualProfile = resolveEdgeVisualProfile(edge.kind, edge.routing?.kind);
   const label = edge.routing?.label || formatEdgeKind(edge.kind);
   const summary = edge.routing?.jsonPath
@@ -131,8 +131,8 @@ function mapLink(edge: WorkflowEdge): CanvasWorkbenchLink {
 
 export function buildSurface(
   graph: WorkflowGraph,
-  uiState: CanvasWorkbenchUiState,
-): CanvasWorkbenchSurface {
+  uiState: CanvasWorkbenchUiStateInput,
+): CanvasWorkbenchSurfaceInput {
   return {
     surfaceId: `workflow:${graph.startNodeId}`,
     mode: "authoring",
@@ -189,7 +189,15 @@ export function buildSurface(
   };
 }
 
-export function defaultUiState(): CanvasWorkbenchUiState {
+// Deliberately omits `zoom`/`panX`/`panY`: `WorkflowDesignerPage.vue` holds this in a `ref` that's
+// created once and fed into `buildSurface()` on every recompute (any draft edit, including a node
+// drag committing its new position) — an explicit zoom/pan here would override the live camera on
+// every one of those rebuilds, since `normalizeSurface()`'s `input.zoom ?? previous.zoom` fallback
+// only kicks in when `input.zoom` is absent (confirmed live: dragging a node snapped the camera
+// back to this default). Leaving them unset lets the *first* build fall through to
+// `normalizeSurface`'s own 1/0/0 default, and every later build preserve the workbench's actual
+// live viewport via `CanvasWorkbench.vue`'s `preserveViewport: true`.
+export function defaultUiState(): CanvasWorkbenchUiStateInput {
   return {
     version: "canvas-workbench.v1",
     selectedNodeIds: [],
@@ -198,9 +206,6 @@ export function defaultUiState(): CanvasWorkbenchUiState {
     groupFrames: [],
     manualPositions: {},
     windowStates: {},
-    zoom: 1,
-    panX: 90,
-    panY: 110,
     menuActionScale: 1,
     isMaximized: false,
     activeInspectorTab: "",

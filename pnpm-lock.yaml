@@ -282,6 +282,9 @@ importers:
       '@candoitall/api-client':
         specifier: workspace:*
         version: link:../api-client
+      '@candoitall/canvas-workbench':
+        specifier: workspace:*
+        version: link:../canvas-workbench
       '@lucide/vue':
         specifier: 'catalog:'
         version: 1.40.0(vue@3.5.42(typescript@5.9.3))

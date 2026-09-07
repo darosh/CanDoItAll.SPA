@@ -17,19 +17,18 @@ import { AppWindow, Layers, PanelsTopLeft } from "@lucide/vue";
 import { computed, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CanvasWorkbench from "@/lib/canvas-workbench/CanvasWorkbench.vue";
-import OverlayWindow from "@/lib/canvas-workbench/OverlayWindow.vue";
+import CanvasWorkbenchToolbar from "@/lib/canvas-workbench-toolbar/CanvasWorkbenchToolbar.vue";
+import OverlayWindow from "@/lib/overlay-window/OverlayWindow.vue";
 import type {
-  CanvasWorkbenchContextActionRequest,
-  CanvasWorkbenchCreateActionRequest,
-  CanvasWorkbenchNodesMovedEventArgs,
-  CanvasWorkbenchSelectionChangedEventArgs,
-  CanvasWorkbenchSurface,
-  CanvasWorkbenchUiState,
-} from "@/lib/canvas-workbench/types";
+  ContextActionRequest as CanvasWorkbenchContextActionRequest,
+  CreateActionRequest as CanvasWorkbenchCreateActionRequest,
+  NodesMovedEvent as CanvasWorkbenchNodesMovedEventArgs,
+  SelectionChangedEvent as CanvasWorkbenchSelectionChangedEventArgs,
+  CanvasWorkbenchSurfaceInput,
+  CanvasWorkbenchUiStateInput,
+} from "@candoitall/canvas-workbench";
 import SubNavTabs from "@/components/SubNavTabs.vue";
 import { workflowDetailTabs } from "@/lib/subNavTabs";
 
@@ -101,8 +100,10 @@ const toolboxOpen = ref(false);
 const selectionWindowOpen = ref(false);
 const componentsWindowOpen = ref(false);
 
-const uiState = ref<CanvasWorkbenchUiState>(defaultUiState());
-const surface = computed<CanvasWorkbenchSurface>(() => buildSurface(draft.graph, uiState.value));
+const uiState = ref<CanvasWorkbenchUiStateInput>(defaultUiState());
+const surface = computed<CanvasWorkbenchSurfaceInput>(() =>
+  buildSurface(draft.graph, uiState.value),
+);
 
 const selectedNode = computed<WorkflowNode | null>(
   () => draft.graph.nodes.find((node) => node.id === selectedNodeId.value) ?? null,
@@ -340,9 +341,9 @@ load();
     <p v-else-if="loadError" class="p-4 text-sm text-destructive">{{ loadError }}</p>
     <template v-else>
       <div class="flex min-h-0 flex-1">
-        <CanvasWorkbench
+        <CanvasWorkbenchToolbar
           :surface="surface"
-          class="min-h-0 flex-1"
+          class="min-h-0 min-w-0 flex-1"
           @selection-changed="onSelectionChanged"
           @nodes-moved="onNodesMoved"
           @context-action="onContextAction"
@@ -350,61 +351,40 @@ load();
           @node-opened="selectNode"
         >
           <template #toolbar-actions>
-            <Button size="sm" variant="outline" :disabled="isBusy" @click="newDraft"
-              >New draft</Button
-            >
-            <Button size="sm" variant="outline" :disabled="isBusy" @click="runValidate"
-              >Validate</Button
-            >
-            <Button size="sm" variant="outline" :disabled="isBusy" @click="runPreview"
-              >Run preview</Button
-            >
-            <Button size="sm" :disabled="isBusy || !isDirty" @click="save">Save</Button>
-            <Badge variant="outline">{{ draft.graph.nodes.length }} node(s)</Badge>
-            <Badge variant="outline">{{ draft.graph.edges.length }} edge(s)</Badge>
-            <Badge v-if="isDirty" variant="warning">Unsaved changes</Badge>
-            <Badge v-if="validation && validation.issues.length" variant="destructive"
-              >{{ validation.issues.length }} issue(s)</Badge
-            >
-            <Badge v-else-if="validation" variant="success">Valid</Badge>
-            <span
-              v-if="feedback"
-              :class="feedback.type === 'error' ? 'text-destructive' : 'text-success'"
-              class="ml-2 whitespace-nowrap text-sm"
-              >{{ feedback.message }}</span
-            >
-            <button
-              type="button"
-              class="cw-toolbar-action cw-toolbar-action--icon"
+            <Button
+              size="icon-sm"
+              :variant="toolboxOpen ? 'secondary' : 'ghost'"
+              :aria-pressed="toolboxOpen"
               aria-label="Toggle nodes and executors toolbox"
               title="Nodes and executors"
               @click="toolboxOpen = !toolboxOpen"
             >
-              <PanelsTopLeft :size="18" />
-            </button>
-            <button
-              type="button"
-              class="cw-toolbar-action cw-toolbar-action--icon"
+              <PanelsTopLeft :size="16" />
+            </Button>
+            <Button
+              size="icon-sm"
+              :variant="selectionWindowOpen ? 'secondary' : 'ghost'"
+              :aria-pressed="selectionWindowOpen"
               aria-label="Toggle workflow nodes list"
               title="Workflow nodes"
               @click="selectionWindowOpen = !selectionWindowOpen"
             >
-              <Layers :size="18" />
-            </button>
-            <button
-              type="button"
-              class="cw-toolbar-action cw-toolbar-action--icon"
+              <Layers :size="16" />
+            </Button>
+            <Button
+              size="icon-sm"
+              :variant="componentsWindowOpen ? 'secondary' : 'ghost'"
+              :aria-pressed="componentsWindowOpen"
               aria-label="Toggle prepared LLM calls"
               title="Prepared calls"
               @click="componentsWindowOpen = !componentsWindowOpen"
             >
-              <AppWindow :size="18" />
-            </button>
+              <AppWindow :size="16" />
+            </Button>
           </template>
           <template #stage-overlays>
             <OverlayWindow
               v-if="toolboxOpen"
-              window-id="workflow-toolbox"
               kicker="Workflow"
               title="Nodes and executors"
               placement="top-left"
@@ -417,7 +397,6 @@ load();
             </OverlayWindow>
             <OverlayWindow
               v-if="selectionWindowOpen"
-              window-id="workflow-selection"
               kicker="Selection"
               title="Workflow nodes"
               @close="selectionWindowOpen = false"
@@ -426,7 +405,6 @@ load();
             </OverlayWindow>
             <OverlayWindow
               v-if="componentsWindowOpen"
-              window-id="workflow-components"
               kicker="LLM components"
               title="Prepared calls"
               @close="componentsWindowOpen = false"
@@ -434,8 +412,26 @@ load();
               <ComponentsWindow @place="onPlaceComponent" />
             </OverlayWindow>
           </template>
-        </CanvasWorkbench>
+        </CanvasWorkbenchToolbar>
         <div class="flex w-[26rem] shrink-0 flex-col border-l border-border">
+          <div class="flex flex-wrap items-center gap-2 border-b border-border px-4 py-2">
+            <Button size="sm" variant="outline" :disabled="isBusy" @click="newDraft"
+              >New draft</Button
+            >
+            <Button size="sm" variant="outline" :disabled="isBusy" @click="runValidate"
+              >Validate</Button
+            >
+            <Button size="sm" variant="outline" :disabled="isBusy" @click="runPreview"
+              >Run preview</Button
+            >
+            <Button size="sm" :disabled="isBusy || !isDirty" @click="save">Save</Button>
+            <span
+              v-if="feedback"
+              :class="feedback.type === 'error' ? 'text-destructive' : 'text-success'"
+              class="whitespace-nowrap text-sm"
+              >{{ feedback.message }}</span
+            >
+          </div>
           <Tabs v-model="activeInspectorTab" class="flex min-h-0 flex-1 flex-col">
             <TabsList class="w-full">
               <TabsTrigger value="definition">Definition</TabsTrigger>
@@ -449,6 +445,10 @@ load();
                 v-model:description="draft.description"
                 v-model:runtime-policy="draft.runtimePolicy"
                 :status="draft.status"
+                :node-count="draft.graph.nodes.length"
+                :edge-count="draft.graph.edges.length"
+                :is-dirty="isDirty"
+                :validation="validation"
                 @dirty="isDirty = true"
               />
             </TabsContent>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { WorkflowExecutorDescriptor } from "@candoitall/api-client";
 import { computed, onMounted, ref } from "vue";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { QUICK_CREATE_NODE_KINDS } from "./actionCatalog";
 import { listWorkflowExecutorCatalog } from "./api";
 import { resolveNodeVisualProfile } from "./nodeKindRegistry";
@@ -45,75 +47,66 @@ const filteredExecutors = computed(() => {
 </script>
 
 <template>
-  <div class="cda-component-toolbox">
-    <p class="cda-component-toolbox__copy">
+  <div class="flex flex-col gap-3">
+    <p class="text-xs text-muted-foreground">
       {{ nodeKinds.length }} node kinds · {{ executors.length }} executors
     </p>
-    <input
-      v-model="search"
-      class="cda-component-toolbox__search"
-      placeholder="Search nodes, executors"
-    />
-    <div class="cda-component-toolbox__body">
-      <div class="cda-component-toolbox__sections">
-        <div class="cda-component-toolbox__section">
-          <div class="cda-component-toolbox__section-summary">
-            <div class="cda-component-toolbox__section-copy">
-              <strong>Node kinds</strong>
-              <small>Add a typed node to the canvas.</small>
-            </div>
-            <span class="cda-component-toolbox__section-badge tone-info">{{
-              filteredKinds.length
-            }}</span>
-          </div>
-          <div class="cda-component-toolbox__item-list">
-            <button
-              v-for="kind in filteredKinds"
-              :key="kind"
-              type="button"
-              class="cda-component-toolbox__item"
-              @click="emit('addNode', kind)"
-            >
-              <span class="cda-component-toolbox__item-icon">{{
-                resolveNodeVisualProfile(kind).icon
-              }}</span>
-              <span class="cda-component-toolbox__item-body">
-                <strong>{{ formatNodeKind(kind) }}</strong>
-              </span>
-            </button>
-          </div>
-        </div>
+    <Input v-model="search" placeholder="Search nodes, executors" />
 
-        <div class="cda-component-toolbox__section">
-          <div class="cda-component-toolbox__section-summary">
-            <div class="cda-component-toolbox__section-copy">
-              <strong>Executors</strong>
-              <small>Add an Executor node preset to this executor.</small>
-            </div>
-            <span class="cda-component-toolbox__section-badge tone-warn">{{
-              filteredExecutors.length
-            }}</span>
-          </div>
-          <div class="cda-component-toolbox__item-list">
-            <button
-              v-for="executor in filteredExecutors"
-              :key="executor.id"
-              type="button"
-              class="cda-component-toolbox__item"
-              @click="emit('addExecutorNode', { executorId: executor.id, name: executor.name })"
-            >
-              <span class="cda-component-toolbox__item-icon">EX</span>
-              <span class="cda-component-toolbox__item-body">
-                <strong>{{ executor.name }}</strong>
-                <small>{{ executor.description }}</small>
-              </span>
-            </button>
-            <div v-if="!filteredExecutors.length" class="cda-component-toolbox__empty">
-              <strong>No executors</strong>
-              <span>No executors match this search.</span>
-            </div>
-          </div>
+    <div class="flex flex-col gap-1">
+      <div class="flex items-center justify-between gap-2 px-1">
+        <div class="min-w-0">
+          <p class="text-sm font-medium">Node kinds</p>
+          <p class="text-xs text-muted-foreground">Add a typed node to the canvas.</p>
         </div>
+        <Badge variant="outline">{{ filteredKinds.length }}</Badge>
+      </div>
+      <button
+        v-for="kind in filteredKinds"
+        :key="kind"
+        type="button"
+        class="flex items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+        @click="emit('addNode', kind)"
+      >
+        <span
+          class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-muted text-[10px] font-medium text-muted-foreground"
+        >
+          {{ resolveNodeVisualProfile(kind).icon }}
+        </span>
+        <span class="min-w-0 flex-1 truncate font-medium">{{ formatNodeKind(kind) }}</span>
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <div class="flex items-center justify-between gap-2 px-1">
+        <div class="min-w-0">
+          <p class="text-sm font-medium">Executors</p>
+          <p class="text-xs text-muted-foreground">Add an Executor node preset to this executor.</p>
+        </div>
+        <Badge variant="outline">{{ filteredExecutors.length }}</Badge>
+      </div>
+      <button
+        v-for="executor in filteredExecutors"
+        :key="executor.id"
+        type="button"
+        class="flex items-start gap-2 rounded-md px-2 py-1.5 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+        @click="emit('addExecutorNode', { executorId: executor.id, name: executor.name })"
+      >
+        <span
+          class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-muted text-[10px] font-medium text-muted-foreground"
+          >EX</span
+        >
+        <span class="min-w-0 flex-1">
+          <p class="truncate font-medium">{{ executor.name }}</p>
+          <p class="truncate text-xs text-muted-foreground">{{ executor.description }}</p>
+        </span>
+      </button>
+      <div
+        v-if="!filteredExecutors.length"
+        class="rounded-md border border-dashed border-border p-3 text-center text-sm"
+      >
+        <p class="font-medium">No executors</p>
+        <p class="text-xs text-muted-foreground">No executors match this search.</p>
       </div>
     </div>
   </div>

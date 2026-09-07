@@ -1,4 +1,4 @@
-import type { CanvasWorkbenchAction } from "@/lib/canvas-workbench/types";
+import type { CanvasWorkbenchAction } from "@candoitall/canvas-workbench";
 
 // Port of the highest-value slice of CanDoItAll/src/Modules/CanDoItAll.Modules.Workbench/
 // CanvasAdapters/ProjectStructureActionCatalogAdapter.cs and

@@ -38,3 +38,16 @@ export function createTestContainer(width = 800, height = 600): HTMLElement {
   Object.defineProperty(container, "clientHeight", { value: height, configurable: true });
   return container;
 }
+
+// Extensions (context-menu, composer, diagnostics) build small DOM overlays with the real global
+// `document` — a minimal polyfill so their `onAttach()` can run under this same plain-Node/
+// node-canvas setup rather than requiring jsdom (see the comment above on why jsdom conflicts
+// with Konva's node-canvas backend).
+if (typeof document === "undefined") {
+  (globalThis as { document?: unknown }).document = {
+    createElement: () => createFakeElement(),
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    activeElement: null,
+  };
+}

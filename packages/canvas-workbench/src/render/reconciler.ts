@@ -42,13 +42,14 @@ export function createReconciler(
 
   function renderNodes(surface: ResolvedSurface): void {
     const positions = resolveAllPositions(surface.nodes, surface.uiState.manualPositions);
+    const connectorAnchors = surface.chrome.connectorAnchors ?? {};
     const seen = new Set<string>();
 
     for (const node of surface.nodes) {
       seen.add(node.id);
       const position = positions.get(node.id) ?? { x: node.x, y: node.y };
       const selected = surface.uiState.selectedNodeIds.includes(node.id);
-      const ctx: RenderContext = { node, position, selected };
+      const ctx: RenderContext = { node, position, selected, connectorAnchors };
       const renderer = registry.resolve(node);
 
       let group = nodeGroups.get(node.id);
@@ -72,12 +73,15 @@ export function createReconciler(
   }
 
   function renderLinks(surface: ResolvedSurface): void {
+    const nodeById = new Map(surface.nodes.map((node) => [node.id, node]));
     const seen = new Set<string>();
     for (const link of surface.links) {
       const key = linkKey(link.sourceId, link.targetId, link.kind);
       const sourceGroup = nodeGroups.get(link.sourceId);
       const targetGroup = nodeGroups.get(link.targetId);
-      if (!sourceGroup || !targetGroup) continue;
+      const sourceNode = nodeById.get(link.sourceId);
+      const targetNode = nodeById.get(link.targetId);
+      if (!sourceGroup || !targetGroup || !sourceNode || !targetNode) continue;
       seen.add(key);
 
       let arrow = linkShapes.get(key);
@@ -86,11 +90,50 @@ export function createReconciler(
         linkShapes.set(key, arrow);
         stageBundle.layers.links.add(arrow);
       }
+
+      // Fallback (no getPortAnchor, e.g. inline-text nodes) uses the node's own bounding-box
+      // center — matches the old plain center-to-center behavior for shapes with no port concept.
+      const sourceRect = sourceGroup.getClientRect({ relativeTo: stageBundle.layers.nodes });
+      const targetRect = targetGroup.getClientRect({ relativeTo: stageBundle.layers.nodes });
+      const sourcePos = sourceGroup.position();
+      const targetPos = targetGroup.position();
+      const sourceCenterLocal = { x: sourceRect.width / 2, y: sourceRect.height / 2 };
+      const targetCenterLocal = { x: targetRect.width / 2, y: targetRect.height / 2 };
+      const targetCenterWorld = {
+        x: targetPos.x + targetCenterLocal.x,
+        y: targetPos.y + targetCenterLocal.y,
+      };
+      const sourceCenterWorld = {
+        x: sourcePos.x + sourceCenterLocal.x,
+        y: sourcePos.y + sourceCenterLocal.y,
+      };
+
+      const sourceRenderer = registry.resolve(sourceNode);
+      const targetRenderer = registry.resolve(targetNode);
+      const sourceLocal =
+        sourceRenderer.getPortAnchor?.(sourceNode, {
+          portId: link.sourcePortId,
+          direction: "output",
+          towardLocalPoint: {
+            x: targetCenterWorld.x - sourcePos.x,
+            y: targetCenterWorld.y - sourcePos.y,
+          },
+        }) ?? sourceCenterLocal;
+      const targetLocal =
+        targetRenderer.getPortAnchor?.(targetNode, {
+          portId: link.targetPortId,
+          direction: "input",
+          towardLocalPoint: {
+            x: sourceCenterWorld.x - targetPos.x,
+            y: sourceCenterWorld.y - targetPos.y,
+          },
+        }) ?? targetCenterLocal;
+
       updateLinkShape(
         arrow,
         link,
-        sourceGroup.getClientRect({ relativeTo: stageBundle.layers.nodes }),
-        targetGroup.getClientRect({ relativeTo: stageBundle.layers.nodes }),
+        { x: sourcePos.x + sourceLocal.x, y: sourcePos.y + sourceLocal.y },
+        { x: targetPos.x + targetLocal.x, y: targetPos.y + targetLocal.y },
       );
     }
 
@@ -137,6 +180,20 @@ export function createReconciler(
   function applyViewport(uiState: ResolvedUiState): void {
     stageBundle.stage.scale({ x: uiState.zoom, y: uiState.zoom });
     stageBundle.stage.position({ x: uiState.panX, y: uiState.panY });
+    // The background Rect is the pan-gesture hit target (interaction/pan-zoom.ts) and lives in
+    // stage-local coordinates, which the scale/position above just moved out from under the
+    // physical viewport — without this, panning drags the rect's covered area away from the
+    // visible screen, so a second drag in the same spot misses it entirely (confirmed live: the
+    // draggable area visibly drifts/shrinks after one pan). Re-fit it to the current inverse
+    // transform every time so it always exactly covers the physical viewport.
+    stageBundle.background.position({
+      x: -uiState.panX / uiState.zoom,
+      y: -uiState.panY / uiState.zoom,
+    });
+    stageBundle.background.size({
+      width: stageBundle.stage.width() / uiState.zoom,
+      height: stageBundle.stage.height() / uiState.zoom,
+    });
     stageBundle.stage.batchDraw();
   }
 

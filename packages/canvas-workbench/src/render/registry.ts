@@ -1,5 +1,9 @@
 import type Konva from "konva";
-import type { CanvasWorkbenchPoint, ResolvedNode } from "../model/types.js";
+import type {
+  CanvasWorkbenchConnectorAnchorOptions,
+  CanvasWorkbenchPoint,
+  ResolvedNode,
+} from "../model/types.js";
 import { decisionDiamondRenderer } from "./default-nodes/decision-diamond.js";
 import { inlineTextRenderer } from "./default-nodes/inline-text.js";
 import { standardCardRenderer } from "./default-nodes/standard-card.js";
@@ -8,12 +12,30 @@ export interface RenderContext {
   node: ResolvedNode;
   position: CanvasWorkbenchPoint;
   selected: boolean;
+  /** `chrome.connectorAnchors` for the current surface, resolved once per render pass — see
+   * default-nodes/standard-card.ts for the only renderer that currently reads it. */
+  connectorAnchors: CanvasWorkbenchConnectorAnchorOptions;
+}
+
+export interface PortAnchorQuery {
+  portId: string | null;
+  direction: "input" | "output";
+  /** The other endpoint's world-space anchor point, expressed relative to *this* node's own
+   * origin (i.e. `otherWorldPoint - thisNode.position`) — shapes with no fixed per-port geometry
+   * (the diamond) use this to pick which side/vertex faces the other node. Card-shaped renderers
+   * can ignore it (their sides are fixed: inputs left, outputs right). */
+  towardLocalPoint: CanvasWorkbenchPoint;
 }
 
 export interface NodeRenderer {
   mount(ctx: RenderContext): Konva.Group;
   update(group: Konva.Group, ctx: RenderContext): void;
   unmount?(group: Konva.Group): void;
+  /** Returns where a link should attach, as a point in the same local (pre-position-offset)
+   * coordinate space `mount()` builds its Konva children in. Optional — render/links.ts falls
+   * back to the node's bounding-box center when a renderer doesn't implement this (e.g.
+   * inline-text nodes have no meaningful port geometry). */
+  getPortAnchor?(node: ResolvedNode, query: PortAnchorQuery): CanvasWorkbenchPoint;
 }
 
 const DECISION_FAMILY = "workflow-decision";

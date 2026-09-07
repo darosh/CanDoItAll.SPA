@@ -3,6 +3,7 @@ import {
   clampZoom,
   computeFitView,
   computeFocusNode,
+  computeViewportCenter,
   MAX_ZOOM,
   MIN_ZOOM,
   zoomAtPoint,
@@ -47,5 +48,24 @@ describe("computeFocusNode", () => {
   it("centers the viewport on the given point at the given zoom", () => {
     const viewport = computeFocusNode({ x: 50, y: 50 }, { width: 800, height: 600 }, 1);
     expect(viewport).toEqual({ zoom: 1, panX: 350, panY: 250 });
+  });
+});
+
+describe("computeViewportCenter", () => {
+  it("is the inverse of computeFocusNode at the identity viewport", () => {
+    const center = computeViewportCenter(
+      { zoom: 1, panX: 0, panY: 0 },
+      { width: 800, height: 600 },
+    );
+    expect(center).toEqual({ x: 400, y: 300 });
+  });
+
+  it("accounts for zoom and pan", () => {
+    const center = computeViewportCenter(
+      { zoom: 2, panX: 100, panY: 50 },
+      { width: 800, height: 600 },
+    );
+    // screen center (400, 300) -> world: (400 - 100) / 2, (300 - 50) / 2
+    expect(center).toEqual({ x: 150, y: 125 });
   });
 });

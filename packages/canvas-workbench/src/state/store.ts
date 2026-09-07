@@ -9,6 +9,7 @@ import type {
   CanvasWorkbenchSurfaceInput,
   ResolvedSurface,
 } from "../model/types.js";
+import { createEmitter, type Emitter } from "./emitter.js";
 import { clampZoom } from "./viewport.js";
 
 interface StoreEvents {
@@ -18,23 +19,24 @@ interface StoreEvents {
   viewportChanged: ViewportChangedEvent;
 }
 
-type Listener<T> = (payload: T) => void;
+const STORE_EVENT_NAMES: (keyof StoreEvents)[] = [
+  "surfaceChanged",
+  "selectionChanged",
+  "nodesMoved",
+  "viewportChanged",
+];
 
 /**
  * Plain framework-agnostic reactive container: a mutable snapshot plus a per-event-type
- * listener set. Deliberately not Vue's reactivity system (this package has no hard Vue
- * dependency — see src/vue/CanvasWorkbench.vue for the optional Vue adapter) and not a full
- * pub/sub library — just enough to let render/reconciler.ts and interaction/* react to state
- * changes without polling.
+ * emitter (see state/emitter.ts). Deliberately not Vue's reactivity system (this package has no
+ * hard Vue dependency — see src/vue/CanvasWorkbench.vue for the optional Vue adapter). Models
+ * canvas *state* only — one-shot requests to the host page (context menus, clipboard) go through
+ * interaction/request-bus.ts instead, so state-diffing and host-facing requests don't get
+ * conflated.
  */
 export class WorkbenchStore {
   private surface: ResolvedSurface;
-  private readonly listeners: { [K in keyof StoreEvents]: Set<Listener<StoreEvents[K]>> } = {
-    surfaceChanged: new Set(),
-    selectionChanged: new Set(),
-    nodesMoved: new Set(),
-    viewportChanged: new Set(),
-  };
+  private readonly emitter: Emitter<StoreEvents> = createEmitter(STORE_EVENT_NAMES);
 
   constructor(input: CanvasWorkbenchSurfaceInput) {
     this.surface = normalizeSurface(input);
@@ -47,7 +49,7 @@ export class WorkbenchStore {
   setSurface(input: CanvasWorkbenchSurfaceInput, options?: { preserveViewport?: boolean }): void {
     const previousUiState = options?.preserveViewport ? this.surface.uiState : undefined;
     this.surface = normalizeSurface(input, previousUiState);
-    this.emit("surfaceChanged", this.surface);
+    this.emitter.emit("surfaceChanged", this.surface);
   }
 
   setSelection(nodeIds: string[], primaryNodeId?: string | null): void {
@@ -59,7 +61,7 @@ export class WorkbenchStore {
         primaryNodeId: primaryNodeId ?? nodeIds[0] ?? null,
       },
     };
-    this.emit("selectionChanged", {
+    this.emitter.emit("selectionChanged", {
       selectedNodeIds: nodeIds,
       primaryNodeId: this.surface.uiState.primaryNodeId,
     });
@@ -76,7 +78,7 @@ export class WorkbenchStore {
       ...this.surface,
       uiState: { ...this.surface.uiState, manualPositions },
     };
-    this.emit("nodesMoved", { positions: changed });
+    this.emitter.emit("nodesMoved", { positions: changed });
   }
 
   setViewport(partial: Partial<{ zoom: number; panX: number; panY: number }>): void {
@@ -85,16 +87,14 @@ export class WorkbenchStore {
     const panX = partial.panX ?? uiState.panX;
     const panY = partial.panY ?? uiState.panY;
     this.surface = { ...this.surface, uiState: { ...uiState, zoom, panX, panY } };
-    this.emit("viewportChanged", { zoom, panX, panY });
+    this.emitter.emit("viewportChanged", { zoom, panX, panY });
   }
 
-  on<K extends keyof StoreEvents>(event: K, handler: Listener<StoreEvents[K]>): () => void {
-    this.listeners[event].add(handler);
-    return () => this.listeners[event].delete(handler);
-  }
-
-  private emit<K extends keyof StoreEvents>(event: K, payload: StoreEvents[K]): void {
-    for (const handler of this.listeners[event]) handler(payload);
+  on<K extends keyof StoreEvents>(
+    event: K,
+    handler: (payload: StoreEvents[K]) => void,
+  ): () => void {
+    return this.emitter.on(event, handler);
   }
 }
 

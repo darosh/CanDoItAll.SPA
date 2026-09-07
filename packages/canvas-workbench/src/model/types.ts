@@ -61,15 +61,62 @@ export interface CanvasWorkbenchPort {
   isRequired: boolean;
 }
 
-// Context-menu / quick-create action tree. Typed for contract compatibility with
-// packages/app/src/pages/workflows/adapter.ts; not rendered or dispatched until the
-// context-menu/composer extension slice lands (see interaction/extensions.ts).
+export interface CanvasWorkbenchInputOption {
+  value: string;
+  label: string;
+}
+
+export interface CanvasWorkbenchInputField {
+  key: string;
+  label: string;
+  placeholder?: string;
+  inputMode?: string;
+  isRequired?: boolean;
+  options?: CanvasWorkbenchInputOption[];
+  // See CanvasWorkbenchNodeInput's index signature note — the old contract's `sectionKey`/
+  // `sectionTitle`/`sectionDescription` fields (grouping metadata the composer dialog doesn't
+  // render yet) are accepted-and-ignored here.
+  [key: string]: unknown;
+}
+
+export interface CanvasWorkbenchInputValue {
+  key: string;
+  value: string;
+}
+
+export interface CanvasWorkbenchUploadedFile {
+  fileName: string;
+  contentType: string;
+  base64Data: string;
+}
+
+// Context-menu / quick-create action tree, driven by interaction/extensions/context-menu.ts +
+// composer.ts. A leaf with `children` opens a submenu instead of firing an action; a leaf with
+// `requiresInput`/`requiresFile` opens the composer dialog instead of firing `contextAction`
+// directly (see CreateActionRequest in model/events.ts for what the composer submits).
 export interface CanvasWorkbenchAction {
   actionId: string;
   label: string;
-  icon: string;
-  tone: CanvasWorkbenchTone;
+  icon?: string;
+  tone?: CanvasWorkbenchTone;
   children?: CanvasWorkbenchAction[];
+  requiresInput?: boolean;
+  requiresFile?: boolean;
+  acceptedFileTypes?: string;
+  filePrompt?: string;
+  supportsDragDrop?: boolean;
+  createMode?: string;
+  objectSubtype?: string;
+  titleLabel?: string;
+  titlePlaceholder?: string;
+  subtitleLabel?: string;
+  subtitlePlaceholder?: string;
+  notesLabel?: string;
+  notesPlaceholder?: string;
+  showDefaultTextFields?: boolean;
+  submitLabel?: string;
+  inputFields?: CanvasWorkbenchInputField[];
+  defaultInputValues?: CanvasWorkbenchInputValue[];
   [key: string]: unknown;
 }
 
@@ -79,10 +126,79 @@ export interface CanvasWorkbenchAction {
 // normalizing every nested option now would be speculative work with no current reader. The
 // surface still *carries* whatever a consumer passes here (see normalize.ts), so cutover-era
 // code that already builds a full chrome object keeps compiling unchanged.
+// Typed now that interaction/extensions/clipboard.ts (slice 3) reads it; the other option bags
+// below remain untyped passthrough until their own slice lands (see the interface-level comment).
+export interface CanvasWorkbenchClipboardOptions {
+  isEnabled?: boolean;
+  allowCopy?: boolean;
+  allowCut?: boolean;
+  allowPaste?: boolean;
+  allowDuplicate?: boolean;
+  format?: string;
+}
+
+// Typed now that interaction/extensions/diagnostics.ts (slice 4) reads it. Old-engine default was
+// `isEnabled: false` — diagnostics is opt-in, unlike clipboard/minimap/marquee/snap-guides above.
+export interface CanvasWorkbenchDiagnosticsOptions {
+  isEnabled?: boolean;
+  showNodeBounds?: boolean;
+  showConnectorAnchors?: boolean;
+  showViewportStats?: boolean;
+}
+
+// Typed now that interaction/extensions/marquee.ts (slice 5) reads it. Old-engine default was
+// `isEnabled: true`, `modifierKey: "Alt"`, `selectionMode: "Intersect"`.
+export interface CanvasWorkbenchMarqueeOptions {
+  isEnabled?: boolean;
+  modifierKey?: string;
+  // Widened like CanvasWorkbenchTone above — state/marquee.ts treats anything other than
+  // "Contain" as "Intersect" (the default). "Intersect" | "Contain" | (anything else, treated as
+  // "Intersect")
+  selectionMode?: string;
+}
+
+// Typed now that interaction/extensions/snap-guides.ts (slice 6) reads it. Old-engine default was
+// `isEnabled: true`, `tolerance: 18` (screen px, scaled by 1/zoom), `modifierPolicy:
+// "ShiftBypassesSnap"`.
+export interface CanvasWorkbenchSnapGuideOptions {
+  isEnabled?: boolean;
+  tolerance?: number;
+  // Widened like CanvasWorkbenchTone above. "ShiftBypassesSnap" (default: holding Shift disables
+  // snapping for that drag) | "none" (Shift has no effect, snapping always applies)
+  modifierPolicy?: string;
+}
+
+// Typed now that interaction/extensions/minimap.ts (slice 7) reads it. Old-engine default was
+// `isEnabled: true` — the only one of the deferred slices that's both on by default AND shown
+// immediately (no toggle needed) rather than starting hidden.
+export interface CanvasWorkbenchMinimapOptions {
+  isEnabled?: boolean;
+  title?: string;
+}
+
+// Typed now that render/default-nodes/standard-card.ts (slice 8) reads it. Old-engine default was
+// `isEnabled: true, showOnHover: true, showOnSelection: true`. Scoped down for this lowest-
+// priority slice: only the selection-driven half is implemented (see standard-card.ts's comment)
+// — `showOnHover` is typed for contract compatibility but not yet wired to a live hover state.
+// `placementMode` ("Edges") is carried but not read; anchors are always drawn on the left/right
+// edges, matching the only mode the old engine actually used.
+export interface CanvasWorkbenchConnectorAnchorOptions {
+  isEnabled?: boolean;
+  showOnHover?: boolean;
+  showOnSelection?: boolean;
+  placementMode?: string;
+}
+
 export interface CanvasWorkbenchChromeInput {
   hintText?: string;
   quickCreateActions?: CanvasWorkbenchAction[];
   groupContextActions?: CanvasWorkbenchAction[];
+  marqueeSelection?: CanvasWorkbenchMarqueeOptions;
+  snapGuides?: CanvasWorkbenchSnapGuideOptions;
+  minimap?: CanvasWorkbenchMinimapOptions;
+  connectorAnchors?: CanvasWorkbenchConnectorAnchorOptions;
+  clipboard?: CanvasWorkbenchClipboardOptions;
+  diagnostics?: CanvasWorkbenchDiagnosticsOptions;
   [key: string]: unknown;
 }
 
@@ -121,6 +237,13 @@ export interface CanvasWorkbenchNodeInput {
   outputPorts?: CanvasWorkbenchPort[];
   x: number;
   y: number;
+  // Index signature (matching CanvasWorkbenchAction/ChromeInput above): the old engine's contract
+  // had several always-required fields the current renderers don't consume yet (leadText,
+  // branchLabel, durationLabel, single-marker fallback fields, media*, plus the dead chips/
+  // footerChips) — accept-and-ignore them here so an adapter already built against that fuller
+  // shape (e.g. packages/app/src/pages/workflows/adapter.ts) keeps compiling verbatim at cutover
+  // time, without forcing a premature decision about which of those fields future renderers add.
+  [key: string]: unknown;
 }
 
 export interface ResolvedNode {
@@ -164,6 +287,9 @@ export interface CanvasWorkbenchLinkInput {
   label?: string;
   tone?: CanvasWorkbenchTone;
   isUserAuthored?: boolean;
+  // See CanvasWorkbenchNodeInput's index signature note — the old contract's `summary` field
+  // (not yet rendered) is the one link field this accepts-and-ignores today.
+  [key: string]: unknown;
 }
 
 export interface ResolvedLink {
@@ -200,6 +326,10 @@ export interface CanvasWorkbenchUiStateInput {
   zoom?: number;
   panX?: number;
   panY?: number;
+  // See CanvasWorkbenchNodeInput's index signature note — the old contract's `version`/
+  // `windowStates`/`menuActionScale`/`isMaximized`/`activeInspectorTab`/`showDiagnostics`/
+  // `showMinimap` fields (not yet consumed) are accepted-and-ignored here.
+  [key: string]: unknown;
 }
 
 export interface ResolvedUiState {

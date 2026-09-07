@@ -9,15 +9,15 @@
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import SubNavTabs from "@/components/SubNavTabs.vue";
-import CanvasWorkbench from "@/lib/canvas-workbench/CanvasWorkbench.vue";
+import CanvasWorkbenchToolbar from "@/lib/canvas-workbench-toolbar/CanvasWorkbenchToolbar.vue";
 import { projectDetailTabs } from "@/lib/subNavTabs";
 import type {
-  CanvasWorkbenchContextActionRequest,
-  CanvasWorkbenchCreateActionRequest,
-  CanvasWorkbenchNodeEditRequest,
-  CanvasWorkbenchNodesMovedEventArgs,
-  CanvasWorkbenchSurface,
-} from "@/lib/canvas-workbench/types";
+  ContextActionRequest as CanvasWorkbenchContextActionRequest,
+  CreateActionRequest as CanvasWorkbenchCreateActionRequest,
+  NodeEditRequest as CanvasWorkbenchNodeEditRequest,
+  NodesMovedEvent as CanvasWorkbenchNodesMovedEventArgs,
+  CanvasWorkbenchSurfaceInput,
+} from "@candoitall/canvas-workbench";
 import { buildSurface, defaultUiState } from "@/pages/project-structure/adapter";
 import {
   QUICK_CREATE_OBJECT_TYPES,
@@ -50,7 +50,7 @@ const projectId = computed(() => String(route.params.projectId));
 
 const loading = ref(true);
 const loadError = ref<string | null>(null);
-const surface = ref<CanvasWorkbenchSurface | null>(null);
+const surface = ref<CanvasWorkbenchSurfaceInput | null>(null);
 
 interface NodeRecord {
   title: string;
@@ -222,7 +222,7 @@ onMounted(load);
     <SubNavTabs :tabs="projectDetailTabs(projectId)" selected="structure" />
     <p v-if="loading" class="p-4 text-sm text-muted-foreground">Loading&hellip;</p>
     <p v-else-if="loadError" class="p-4 text-sm text-destructive">{{ loadError }}</p>
-    <CanvasWorkbench
+    <CanvasWorkbenchToolbar
       v-else-if="surface"
       :surface="surface"
       class="min-h-0 flex-1"

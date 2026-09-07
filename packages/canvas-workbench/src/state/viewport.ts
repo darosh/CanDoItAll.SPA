@@ -59,6 +59,19 @@ export function computeFitView(
   };
 }
 
+/** World-space point currently at the center of the viewport — used to anchor pasted/duplicated
+ * nodes somewhere visible (see interaction/extensions/clipboard.ts) rather than at a stale
+ * screen position. */
+export function computeViewportCenter(
+  viewport: Viewport,
+  viewportSize: { width: number; height: number },
+): { x: number; y: number } {
+  return {
+    x: (viewportSize.width / 2 - viewport.panX) / viewport.zoom,
+    y: (viewportSize.height / 2 - viewport.panY) / viewport.zoom,
+  };
+}
+
 /** Re-centers the viewport on a single world point without changing zoom. */
 export function computeFocusNode(
   point: { x: number; y: number },

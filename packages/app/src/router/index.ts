@@ -80,7 +80,7 @@ const handBuilt: RouteRecordRaw[] = [
   {
     path: "/settings/api-access",
     name: "settings-api-access",
-    component: () => import("@/pages/SettingsApiAccessPage.vue"),
+    component: () => import("@/pages/settings/SettingsApiAccessPage.vue"),
     meta: { title: "API access" },
   },
 ];

@@ -1,13 +1,22 @@
 import type { CanDoItAllClient } from "@candoitall/api-client";
 import type {
-  CanvasWorkbenchChip,
-  CanvasWorkbenchLink,
-  CanvasWorkbenchNode,
-  CanvasWorkbenchSurface,
-  CanvasWorkbenchUiState,
-} from "@/lib/canvas-workbench/types";
+  CanvasWorkbenchLinkInput,
+  CanvasWorkbenchNodeInput,
+  CanvasWorkbenchSurfaceInput,
+  CanvasWorkbenchUiStateInput,
+} from "@candoitall/canvas-workbench";
 import { buildNodeContextActions, buildQuickCreateActions } from "./actionCatalog";
 import { resolveVisualProfile } from "./nodeKindRegistry";
+
+// `chips`/`footerChips` are dead fields in the new engine (only the superseded legacy DOM
+// renderer ever read them — see @candoitall/canvas-workbench's model/types.ts) — no longer
+// exported by the package, so this keeps a local shape for them. Harmless to keep building: the
+// new engine's *Input types accept-and-ignore unrecognized fields (see their index-signature
+// notes) rather than rejecting them.
+interface LegacyChip {
+  text: string;
+  tone: string;
+}
 
 // Port of CanDoItAll/src/Modules/CanDoItAll.Modules.Workbench/CanvasAdapters/ProjectStructureGraphAdapter.cs's
 // BuildSurface/MapCanvasNode, adapted to the flatter wire DTO from
@@ -103,12 +112,12 @@ function resolveProgress(node: WireNode): { mode: string; percent: number } {
   return { mode: "progress", percent: 48 };
 }
 
-function buildHeaderChips(node: WireNode): CanvasWorkbenchChip[] {
+function buildHeaderChips(node: WireNode): LegacyChip[] {
   return node.badges.map((badge) => ({ text: badge, tone: "accent" }));
 }
 
-function buildFooterChips(node: WireNode): CanvasWorkbenchChip[] {
-  const chips: CanvasWorkbenchChip[] = [];
+function buildFooterChips(node: WireNode): LegacyChip[] {
+  const chips: LegacyChip[] = [];
   if (node.route) chips.push({ text: "Routed", tone: "neutral" });
   if (node.artifactId) chips.push({ text: "Artifact", tone: "success" });
   if (node.mediaOriginalFileName) chips.push({ text: "Uploaded", tone: "accent" });
@@ -135,7 +144,7 @@ function resolvePalette(node: WireNode, fallbackPaletteKey: string): string {
   }
 }
 
-function mapNode(node: WireNode, hasChildren: boolean): CanvasWorkbenchNode {
+function mapNode(node: WireNode, hasChildren: boolean): CanvasWorkbenchNodeInput {
   const visualProfile = resolveVisualProfile(node.objectType, node.objectSubtype, node.status);
   const progress = resolveProgress(node);
   const isInlineTextNode = node.objectType === "Note" && !node.subtitle;
@@ -191,7 +200,7 @@ function mapNode(node: WireNode, hasChildren: boolean): CanvasWorkbenchNode {
   };
 }
 
-function mapLink(link: WireLink): CanvasWorkbenchLink {
+function mapLink(link: WireLink): CanvasWorkbenchLinkInput {
   return {
     sourceId: link.sourceId,
     targetId: link.targetId,
@@ -207,8 +216,8 @@ function mapLink(link: WireLink): CanvasWorkbenchLink {
 
 export function buildSurface(
   read: StructureReadResult,
-  uiState: CanvasWorkbenchUiState,
-): CanvasWorkbenchSurface {
+  uiState: CanvasWorkbenchUiStateInput,
+): CanvasWorkbenchSurfaceInput {
   const parentIds = new Set(
     read.nodes.filter((node) => node.parentId).map((node) => node.parentId as string),
   );
@@ -270,7 +279,12 @@ export function buildSurface(
   };
 }
 
-export function defaultUiState(): CanvasWorkbenchUiState {
+// Deliberately omits `zoom`/`panX`/`panY` — see workflows/adapter.ts's `defaultUiState()` for why:
+// `ProjectStructurePage.vue` reuses `surface.value?.uiState` across reloads, and an explicit
+// zoom/pan here would win over `normalizeSurface()`'s `previous?.zoom` fallback (the live
+// workbench viewport) on every one of those, the same silent-reset bug confirmed live on the
+// workflow designer's node-drag path.
+export function defaultUiState(): CanvasWorkbenchUiStateInput {
   return {
     version: "canvas-workbench.v1",
     selectedNodeIds: [],
@@ -279,9 +293,6 @@ export function defaultUiState(): CanvasWorkbenchUiState {
     groupFrames: [],
     manualPositions: {},
     windowStates: {},
-    zoom: 1,
-    panX: 90,
-    panY: 110,
     menuActionScale: 1,
     isMaximized: false,
     activeInspectorTab: "",

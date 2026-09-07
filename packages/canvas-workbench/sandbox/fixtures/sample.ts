@@ -12,6 +12,26 @@ export const sampleSurface: CanvasWorkbenchSurfaceInput = {
       x: 320,
       y: 20,
       accentColor: "warning",
+      contextActions: [
+        { actionId: "rename", label: "Rename" },
+        {
+          actionId: "set-progress",
+          label: "Set progress",
+          children: [
+            { actionId: "progress-0", label: "0%" },
+            { actionId: "progress-50", label: "50%" },
+            { actionId: "progress-100", label: "100%" },
+          ],
+        },
+        {
+          actionId: "add-note",
+          label: "Add note...",
+          requiresInput: true,
+          titleLabel: "Note title",
+          notesLabel: "Details",
+          submitLabel: "Add",
+        },
+      ],
     },
     {
       id: "approve",
@@ -20,6 +40,30 @@ export const sampleSurface: CanvasWorkbenchSurfaceInput = {
       x: 620,
       y: -60,
       accentColor: "success",
+      inputPorts: [
+        {
+          id: "in-1",
+          label: "in",
+          side: "input",
+          tone: "accent",
+          categoryKey: "",
+          accentColor: "",
+          kind: "",
+          isRequired: true,
+        },
+      ],
+      outputPorts: [
+        {
+          id: "out-1",
+          label: "done",
+          side: "output",
+          tone: "success",
+          categoryKey: "",
+          accentColor: "",
+          kind: "",
+          isRequired: false,
+        },
+      ],
     },
     {
       id: "reject",
@@ -47,6 +91,46 @@ export const sampleSurface: CanvasWorkbenchSurfaceInput = {
   uiState: {
     groupFrames: [
       { id: "frame-1", label: "Approval flow", anchorNodeIds: ["check", "approve", "reject"] },
+    ],
+  },
+  chrome: {
+    diagnostics: { isEnabled: true, showNodeBounds: true },
+    marqueeSelection: { isEnabled: true, modifierKey: "Alt", selectionMode: "Intersect" },
+    snapGuides: { isEnabled: true, tolerance: 18, modifierPolicy: "ShiftBypassesSnap" },
+    minimap: { isEnabled: true, title: "Sandbox overview" },
+    connectorAnchors: {
+      isEnabled: true,
+      showOnSelection: true,
+      showOnHover: true,
+      placementMode: "Edges",
+    },
+    clipboard: {
+      isEnabled: true,
+      allowCopy: true,
+      allowCut: true,
+      allowPaste: true,
+      allowDuplicate: true,
+    },
+    quickCreateActions: [
+      {
+        actionId: "create-step",
+        label: "New step",
+        requiresInput: true,
+        titleLabel: "Step title",
+        subtitleLabel: "Description",
+        submitLabel: "Create",
+      },
+      {
+        actionId: "create-image",
+        label: "Upload image",
+        requiresInput: false,
+        requiresFile: true,
+        acceptedFileTypes: "image/*",
+        filePrompt: "Drop an image, or click to choose one",
+        supportsDragDrop: true,
+        showDefaultTextFields: false,
+        submitLabel: "Upload",
+      },
     ],
   },
 };

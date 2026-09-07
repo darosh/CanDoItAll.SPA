@@ -13,14 +13,14 @@ import {
 } from "@lucide/vue";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { getCanvasWorkbench } from "./runtime/index";
-import "./styles/overlay-window.css";
-import "./styles/workbench/shell/01-layout-and-shell.css";
-import "./styles/workbench/chrome/02-toolbar-and-windows.css";
-import "./styles/workbench/panels/03-help-settings-and-preview.css";
-import "./styles/workbench/scene/04-scene-and-nodes.css";
-import "./styles/workbench/overlays/05-overlays-and-composer.css";
-import "./styles/workbench/responsive/06-motion-and-responsive.css";
-import "./styles/theme-bridge.css";
+// import "./styles/overlay-window.css";
+// import "./styles/workbench/shell/01-layout-and-shell.css";
+// import "./styles/workbench/chrome/02-toolbar-and-windows.css";
+// import "./styles/workbench/panels/03-help-settings-and-preview.css";
+// import "./styles/workbench/scene/04-scene-and-nodes.css";
+// import "./styles/workbench/overlays/05-overlays-and-composer.css";
+// import "./styles/workbench/responsive/06-motion-and-responsive.css";
+// import "./styles/theme-bridge.css";
 import type {
   CanvasWorkbenchAction,
   CanvasWorkbenchClipboardRequest,

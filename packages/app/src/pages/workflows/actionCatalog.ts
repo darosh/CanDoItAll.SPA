@@ -1,4 +1,4 @@
-import type { CanvasWorkbenchAction } from "@/lib/canvas-workbench/types";
+import type { CanvasWorkbenchAction } from "@candoitall/canvas-workbench";
 import { formatNodeKind, WorkflowNodeKind } from "./types";
 
 // Context-menu + quick-create action set for the workflow designer canvas, following the

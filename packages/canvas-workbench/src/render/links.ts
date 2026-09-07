@@ -1,17 +1,6 @@
 import Konva from "konva";
-import type { ResolvedLink } from "../model/types.js";
+import type { CanvasWorkbenchPoint, ResolvedLink } from "../model/types.js";
 import { resolveTone } from "./theme.js";
-
-export interface Rect {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-function centerOf(rect: Rect): { x: number; y: number } {
-  return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
-}
 
 export function createLinkShape(): Konva.Arrow {
   return new Konva.Arrow({
@@ -27,14 +16,15 @@ export function createLinkShape(): Konva.Arrow {
   });
 }
 
+/** `source`/`target` are already-resolved world-space connection points (see
+ * render/reconciler.ts's renderLinks, which asks each endpoint's NodeRenderer.getPortAnchor for
+ * them) — this just paints the arrow, no endpoint geometry left to compute here. */
 export function updateLinkShape(
   arrow: Konva.Arrow,
   link: ResolvedLink,
-  sourceRect: Rect,
-  targetRect: Rect,
+  source: CanvasWorkbenchPoint,
+  target: CanvasWorkbenchPoint,
 ): void {
-  const source = centerOf(sourceRect);
-  const target = centerOf(targetRect);
   const tokens = resolveTone(link.tone);
   arrow.points([source.x, source.y, target.x, target.y]);
   arrow.stroke(tokens.stroke);

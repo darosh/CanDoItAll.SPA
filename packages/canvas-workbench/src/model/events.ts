@@ -1,4 +1,8 @@
-import type { CanvasWorkbenchPoint } from "./types.js";
+import type {
+  CanvasWorkbenchInputValue,
+  CanvasWorkbenchPoint,
+  CanvasWorkbenchUploadedFile,
+} from "./types.js";
 
 export interface SelectionChangedEvent {
   primaryNodeId: string | null;
@@ -21,8 +25,8 @@ export interface ViewportChangedEvent {
   panY: number;
 }
 
-// Typed for contract compatibility with the old engine's event payloads; not yet emitted —
-// the context-menu/composer/clipboard extension slices are what will fire these.
+// Fired by interaction/extensions/context-menu.ts when a context-menu leaf without `children`
+// and without requiresInput/requiresFile is selected.
 export interface ContextActionRequest {
   nodeId: string | null;
   actionId: string;
@@ -30,6 +34,8 @@ export interface ContextActionRequest {
   y: number;
 }
 
+// Fired by interaction/extensions/composer.ts on submit — either directly (a quick-create action
+// with no requiresInput/requiresFile) or after the user fills in the composer dialog.
 export interface CreateActionRequest {
   actionId: string;
   sourceNodeId: string | null;
@@ -38,7 +44,20 @@ export interface CreateActionRequest {
   parentNodeId: string | null;
   title: string;
   subtitle: string;
+  notes: string;
+  createMode: string;
+  objectSubtype: string;
+  uploadedFile: CanvasWorkbenchUploadedFile | null;
+  inputValues: CanvasWorkbenchInputValue[];
 }
+
+// Pre-fill-only subset accepted by CanvasWorkbenchHandle.openCreateComposer() to seed the dialog.
+export type CreateComposerRequest = Partial<
+  Pick<
+    CreateActionRequest,
+    "title" | "subtitle" | "notes" | "x" | "y" | "objectSubtype" | "inputValues"
+  >
+>;
 
 export interface NodeEditRequest {
   nodeId: string;

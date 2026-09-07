@@ -93,4 +93,53 @@ describe("render reconciler", () => {
     reconciler.destroy();
     stageBundle.destroy();
   });
+
+  it("shows connector-anchor dots only on a selected node, when enabled", () => {
+    const portFixture: CanvasWorkbenchSurfaceInput = {
+      surfaceId: "port-fixture",
+      nodes: [
+        {
+          id: "with-ports",
+          title: "With ports",
+          x: 0,
+          y: 0,
+          inputPorts: [
+            {
+              id: "in-1",
+              label: "in",
+              side: "input",
+              tone: "accent",
+              categoryKey: "",
+              accentColor: "",
+              kind: "",
+              isRequired: false,
+            },
+          ],
+          outputPorts: [],
+        },
+        { id: "other", title: "Other", x: 300, y: 0 },
+      ],
+      uiState: { selectedNodeIds: ["with-ports"] },
+      chrome: { connectorAnchors: { isEnabled: true, showOnSelection: true } },
+    };
+
+    const container = createTestContainer();
+    const stageBundle = createStageLayers(container);
+    const store = createWorkbenchStore(portFixture);
+    const registry = createDefaultRegistry();
+    const reconciler = createReconciler(stageBundle, store, registry);
+
+    const selectedAnchors = reconciler.nodeGroups
+      .get("with-ports")
+      ?.findOne(".card-connector-anchors");
+    const unselectedAnchors = reconciler.nodeGroups
+      .get("other")
+      ?.findOne(".card-connector-anchors");
+    expect(selectedAnchors?.visible()).toBe(true);
+    expect(selectedAnchors?.children.length).toBe(1);
+    expect(unselectedAnchors?.visible()).toBe(false);
+
+    reconciler.destroy();
+    stageBundle.destroy();
+  });
 });

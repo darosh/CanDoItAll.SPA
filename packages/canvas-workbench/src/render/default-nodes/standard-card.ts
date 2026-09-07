@@ -1,10 +1,53 @@
 import Konva from "konva";
-import type { NodeRenderer, RenderContext } from "../registry.js";
+import type { ResolvedNode } from "../../model/types.js";
+import { cardPortLocalPosition } from "../ports.js";
+import type { NodeRenderer, PortAnchorQuery, RenderContext } from "../registry.js";
 import { resolveTone } from "../theme.js";
 
 export const CARD_WIDTH = 200;
 export const CARD_HEIGHT = 96;
 const MARKER_RADIUS = 4;
+const ANCHOR_RADIUS = 4;
+
+/**
+ * Connector-anchor dots at each port's edge position, per `chrome.connectorAnchors` (slice 8 —
+ * lowest priority in the plan doc, with no evidence of a real consumer need today). Scoped down
+ * from the old engine's design: only the selection-driven half is implemented
+ * (`showOnSelection`) since that's already flowing through RenderContext.selected on every
+ * render pass; `showOnHover` would need new live per-node hover-state plumbing with no current
+ * reader to justify it, so it's typed (see model/types.ts) but not wired here.
+ */
+function paintConnectorAnchors(group: Konva.Group, ctx: RenderContext): void {
+  const anchorGroup = group.findOne<Konva.Group>(".card-connector-anchors");
+  if (!anchorGroup) return;
+
+  const options = ctx.connectorAnchors;
+  const visible = options.isEnabled !== false && options.showOnSelection !== false && ctx.selected;
+  anchorGroup.visible(visible);
+  if (!visible) return;
+
+  anchorGroup.destroyChildren();
+
+  function addAnchors(ports: RenderContext["node"]["inputPorts"], edgeX: number): void {
+    ports.forEach((port) => {
+      const tokens = resolveTone(port.tone);
+      const { y } = cardPortLocalPosition(ports, port.id, edgeX, CARD_HEIGHT);
+      anchorGroup?.add(
+        new Konva.Circle({
+          x: edgeX,
+          y,
+          radius: ANCHOR_RADIUS,
+          fill: tokens.fill,
+          stroke: tokens.stroke,
+          strokeWidth: 1,
+        }),
+      );
+    });
+  }
+
+  addAnchors(ctx.node.inputPorts, 0);
+  addAnchors(ctx.node.outputPorts, CARD_WIDTH);
+}
 
 function paint(group: Konva.Group, ctx: RenderContext): void {
   const tokens = resolveTone(ctx.node.accentColor || ctx.node.status || "neutral");
@@ -35,6 +78,8 @@ function paint(group: Konva.Group, ctx: RenderContext): void {
       }),
     );
   });
+
+  paintConnectorAnchors(group, ctx);
 }
 
 export const standardCardRenderer: NodeRenderer = {
@@ -77,6 +122,9 @@ export const standardCardRenderer: NodeRenderer = {
       }),
     );
     group.add(new Konva.Group({ name: "card-markers", x: 12, y: CARD_HEIGHT - 20 }));
+    group.add(
+      new Konva.Group({ name: "card-connector-anchors", listening: false, visible: false }),
+    );
 
     paint(group, ctx);
     return group;
@@ -85,5 +133,11 @@ export const standardCardRenderer: NodeRenderer = {
   update(group: Konva.Group, ctx: RenderContext): void {
     group.position(ctx.position);
     paint(group, ctx);
+  },
+
+  getPortAnchor(node: ResolvedNode, query: PortAnchorQuery) {
+    const ports = query.direction === "input" ? node.inputPorts : node.outputPorts;
+    const edgeX = query.direction === "input" ? 0 : CARD_WIDTH;
+    return cardPortLocalPosition(ports, query.portId, edgeX, CARD_HEIGHT);
   },
 };

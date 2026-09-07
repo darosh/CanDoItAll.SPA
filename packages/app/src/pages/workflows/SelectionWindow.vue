@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { WorkflowNode } from "@candoitall/api-client";
 import { computed, ref } from "vue";
+import { Input } from "@/components/ui/input";
 import { resolveNodeVisualProfile } from "./nodeKindRegistry";
 import { formatNodeKind } from "./types";
 
@@ -20,30 +21,33 @@ const filteredNodes = computed(() => {
 </script>
 
 <template>
-  <div class="cda-component-toolbox">
-    <p class="cda-component-toolbox__copy">{{ nodes.length }} node(s)</p>
-    <input v-model="search" class="cda-component-toolbox__search" placeholder="Search nodes" />
-    <div class="cda-component-toolbox__body">
-      <div class="cda-component-toolbox__item-list">
-        <button
-          v-for="node in filteredNodes"
-          :key="node.id"
-          type="button"
-          class="cda-component-toolbox__item"
-          @click="emit('select', node.id)"
+  <div class="flex flex-col gap-3">
+    <p class="text-xs text-muted-foreground">{{ nodes.length }} node(s)</p>
+    <Input v-model="search" placeholder="Search nodes" />
+    <div class="flex flex-col gap-1">
+      <button
+        v-for="node in filteredNodes"
+        :key="node.id"
+        type="button"
+        class="flex items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+        @click="emit('select', node.id)"
+      >
+        <span
+          class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-muted text-[10px] font-medium text-muted-foreground"
         >
-          <span class="cda-component-toolbox__item-icon">{{
-            resolveNodeVisualProfile(node.kind).icon
-          }}</span>
-          <span class="cda-component-toolbox__item-body">
-            <strong>{{ node.name }}</strong>
-            <small>{{ formatNodeKind(node.kind) }}</small>
-          </span>
-        </button>
-        <div v-if="!filteredNodes.length" class="cda-component-toolbox__empty">
-          <strong>No nodes</strong>
-          <span>No nodes match this search.</span>
-        </div>
+          {{ resolveNodeVisualProfile(node.kind).icon }}
+        </span>
+        <span class="min-w-0 flex-1">
+          <p class="truncate font-medium">{{ node.name }}</p>
+          <p class="truncate text-xs text-muted-foreground">{{ formatNodeKind(node.kind) }}</p>
+        </span>
+      </button>
+      <div
+        v-if="!filteredNodes.length"
+        class="rounded-md border border-dashed border-border p-3 text-center text-sm"
+      >
+        <p class="font-medium">No nodes</p>
+        <p class="text-xs text-muted-foreground">No nodes match this search.</p>
       </div>
     </div>
   </div>

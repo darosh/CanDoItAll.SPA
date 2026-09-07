@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { WorkflowRuntimePolicy } from "@candoitall/api-client";
+import type { WorkflowRuntimePolicy, WorkflowValidationResult } from "@candoitall/api-client";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +11,13 @@ const name = defineModel<string>("name", { required: true });
 const description = defineModel<string>("description", { required: true });
 const runtimePolicy = defineModel<WorkflowRuntimePolicy>("runtimePolicy", { required: true });
 
-defineProps<{ status: number }>();
+defineProps<{
+  status: number;
+  nodeCount: number;
+  edgeCount: number;
+  isDirty: boolean;
+  validation: WorkflowValidationResult | null;
+}>();
 const emit = defineEmits<{ dirty: [] }>();
 
 function onBackendChange(value: unknown) {
@@ -22,6 +28,18 @@ function onBackendChange(value: unknown) {
 
 <template>
   <div class="space-y-6">
+    <div class="space-y-2">
+      <Label>Graph</Label>
+      <div class="flex flex-wrap items-center gap-2">
+        <Badge variant="outline">{{ nodeCount }} node(s)</Badge>
+        <Badge variant="outline">{{ edgeCount }} edge(s)</Badge>
+        <Badge v-if="isDirty" variant="warning">Unsaved changes</Badge>
+        <Badge v-if="validation && validation.issues.length" variant="destructive"
+          >{{ validation.issues.length }} issue(s)</Badge
+        >
+        <Badge v-else-if="validation" variant="success">Valid</Badge>
+      </div>
+    </div>
     <div class="space-y-2">
       <Label for="workflow-name">Name</Label>
       <Input id="workflow-name" v-model="name" @update:model-value="emit('dirty')" />

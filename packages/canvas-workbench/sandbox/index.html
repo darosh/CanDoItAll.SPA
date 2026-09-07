@@ -32,7 +32,23 @@
       <button id="fit-view">Fit view</button>
       <button id="zoom-100">100%</button>
       <button id="select-check">Select "check"</button>
+      <button id="quick-create">Quick create</button>
+      <button id="toggle-diagnostics">Diagnostics</button>
+      <button id="toggle-minimap">Minimap</button>
     </div>
+    <p
+      style="
+        position: fixed;
+        bottom: 8px;
+        left: 8px;
+        z-index: 1;
+        font: 12px monospace;
+        color: #71717a;
+      "
+    >
+      Right-click a node for its context menu, or the canvas background for group actions. Alt+drag
+      the background for marquee selection.
+    </p>
     <div id="host"></div>
     <script type="module" src="./main.ts"></script>
   </body>
