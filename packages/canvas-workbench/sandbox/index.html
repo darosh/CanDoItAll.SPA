@@ -18,8 +18,10 @@
         display: flex;
         gap: 8px;
       }
-      #toolbar button {
+      #toolbar button,
+      #toolbar a {
         padding: 6px 10px;
+        align-self: center;
       }
       #host {
         width: 100%;
@@ -29,6 +31,9 @@
   </head>
   <body>
     <div id="toolbar">
+      <a href="?fixture=basic">Basic</a>
+      <a href="?fixture=process">Process</a>
+      <a href="?fixture=workflow">Workflow</a>
       <button id="fit-view">Fit view</button>
       <button id="zoom-100">100%</button>
       <button id="select-check">Select "check"</button>

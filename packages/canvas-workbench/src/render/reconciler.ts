@@ -4,7 +4,12 @@ import { computeFrameBounds } from "../state/frames.js";
 import { resolveAllPositions } from "../state/positions.js";
 import type { WorkbenchStore } from "../state/store.js";
 import { createFrameGroup, updateFrameGroup } from "./frames.js";
-import { createLinkShape, updateLinkShape } from "./links.js";
+import {
+  createLinkLabelShape,
+  createLinkShape,
+  updateLinkLabelShape,
+  updateLinkShape,
+} from "./links.js";
 import type { NodeRendererRegistry, RenderContext } from "./registry.js";
 import type { WorkbenchStage } from "./stage.js";
 
@@ -38,6 +43,7 @@ export function createReconciler(
 ): Reconciler {
   const nodeGroups = new Map<string, Konva.Group>();
   const linkShapes = new Map<string, Konva.Arrow>();
+  const linkLabelShapes = new Map<string, Konva.Group>();
   const frameGroups = new Map<string, Konva.Group>();
 
   function renderNodes(surface: ResolvedSurface): void {
@@ -91,6 +97,13 @@ export function createReconciler(
         stageBundle.layers.links.add(arrow);
       }
 
+      let labelGroup = linkLabelShapes.get(key);
+      if (!labelGroup) {
+        labelGroup = createLinkLabelShape();
+        linkLabelShapes.set(key, labelGroup);
+        stageBundle.layers.links.add(labelGroup);
+      }
+
       // Fallback (no getPortAnchor, e.g. inline-text nodes) uses the node's own bounding-box
       // center — matches the old plain center-to-center behavior for shapes with no port concept.
       const sourceRect = sourceGroup.getClientRect({ relativeTo: stageBundle.layers.nodes });
@@ -129,18 +142,22 @@ export function createReconciler(
           },
         }) ?? targetCenterLocal;
 
-      updateLinkShape(
-        arrow,
-        link,
-        { x: sourcePos.x + sourceLocal.x, y: sourcePos.y + sourceLocal.y },
-        { x: targetPos.x + targetLocal.x, y: targetPos.y + targetLocal.y },
-      );
+      const sourceWorld = { x: sourcePos.x + sourceLocal.x, y: sourcePos.y + sourceLocal.y };
+      const targetWorld = { x: targetPos.x + targetLocal.x, y: targetPos.y + targetLocal.y };
+      updateLinkShape(arrow, link, sourceWorld, targetWorld);
+      updateLinkLabelShape(labelGroup, link, sourceWorld, targetWorld);
     }
 
     for (const [key, arrow] of linkShapes) {
       if (!seen.has(key)) {
         arrow.destroy();
         linkShapes.delete(key);
+      }
+    }
+    for (const [key, labelGroup] of linkLabelShapes) {
+      if (!seen.has(key)) {
+        labelGroup.destroy();
+        linkLabelShapes.delete(key);
       }
     }
     stageBundle.layers.links.batchDraw();

@@ -23,10 +23,15 @@ describe("normalizeNode", () => {
     expect(normalizeNode({ id: "n1", x: 0, y: 0, progressPercent: -10 }).progressPercent).toBe(0);
   });
 
-  it("never carries the dead chips/footerChips fields forward", () => {
-    const resolved = normalizeNode({ id: "n1", x: 0, y: 0 } as never);
-    expect("chips" in resolved).toBe(false);
-    expect("footerChips" in resolved).toBe(false);
+  it("defaults chips/footerChips to empty and carries them through when provided", () => {
+    expect(normalizeNode({ id: "n1", x: 0, y: 0 }).chips).toEqual([]);
+    expect(normalizeNode({ id: "n1", x: 0, y: 0 }).footerChips).toEqual([]);
+
+    const chips = [{ text: "Model: gpt-5", tone: "accent" }];
+    const footerChips = [{ text: "agent-42", tone: "neutral" }];
+    const resolved = normalizeNode({ id: "n1", x: 0, y: 0, chips, footerChips });
+    expect(resolved.chips).toEqual(chips);
+    expect(resolved.footerChips).toEqual(footerChips);
   });
 });
 

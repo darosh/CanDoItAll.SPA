@@ -36,6 +36,8 @@ export function normalizeNode(input: CanvasWorkbenchNodeInput): ResolvedNode {
     inlineTextPlaceholder: input.inlineTextPlaceholder ?? "",
     compactPath: input.compactPath ?? null,
     annotations: input.annotations ?? [],
+    chips: input.chips ?? [],
+    footerChips: input.footerChips ?? [],
     contextActions: input.contextActions ?? [],
     inputPorts: input.inputPorts ?? [],
     outputPorts: input.outputPorts ?? [],

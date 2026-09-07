@@ -4,11 +4,10 @@
 //
 // Every DTO below is split into an `*Input` type (deeply partial — what a consumer actually
 // authors) and a `Resolved*` type (all fields present — what `normalize.ts` produces and the
-// rest of this package consumes). Dropped from the original contract entirely: `chips` /
-// `footerChips` on nodes (documented dead fields, only read by the superseded legacy DOM
-// renderer), `CanvasWorkbenchDotNetRefShim` (Blazor-interop artifact), and the old engine's
-// diagnostics/metrics/scene-snapshot/hot-zone *return* types (those describe old-engine
-// internals and will be re-derived from Konva's own capabilities when their feature slices land).
+// rest of this package consumes). Dropped from the original contract entirely:
+// `CanvasWorkbenchDotNetRefShim` (Blazor-interop artifact), and the old engine's diagnostics/
+// metrics/scene-snapshot/hot-zone *return* types (those describe old-engine internals and will
+// be re-derived from Konva's own capabilities when their feature slices land).
 
 export type CanvasWorkbenchMode = "authoring" | "delete" | "dependency";
 
@@ -38,6 +37,15 @@ export interface CanvasWorkbenchMarker {
   icon: string;
   tone: CanvasWorkbenchTone;
   label: string;
+}
+
+/** A small tone-colored pill of text — rendered in a row via `chips` (body) or `footerChips`
+ * (bottom row), e.g. a component/executor/model badge on a workflow node or a role/artifact
+ * badge on a process node. No icon field, matching the original contract's shape exactly
+ * (see packages/app/src/lib/canvas-workbench/types.d.ts). */
+export interface CanvasWorkbenchChip {
+  text: string;
+  tone: CanvasWorkbenchTone;
 }
 
 export interface CanvasWorkbenchAnnotation {
@@ -232,6 +240,8 @@ export interface CanvasWorkbenchNodeInput {
   inlineTextPlaceholder?: string;
   compactPath?: CanvasWorkbenchCompactPath | null;
   annotations?: CanvasWorkbenchAnnotation[];
+  chips?: CanvasWorkbenchChip[];
+  footerChips?: CanvasWorkbenchChip[];
   contextActions?: CanvasWorkbenchAction[];
   inputPorts?: CanvasWorkbenchPort[];
   outputPorts?: CanvasWorkbenchPort[];
@@ -239,10 +249,10 @@ export interface CanvasWorkbenchNodeInput {
   y: number;
   // Index signature (matching CanvasWorkbenchAction/ChromeInput above): the old engine's contract
   // had several always-required fields the current renderers don't consume yet (leadText,
-  // branchLabel, durationLabel, single-marker fallback fields, media*, plus the dead chips/
-  // footerChips) — accept-and-ignore them here so an adapter already built against that fuller
-  // shape (e.g. packages/app/src/pages/workflows/adapter.ts) keeps compiling verbatim at cutover
-  // time, without forcing a premature decision about which of those fields future renderers add.
+  // branchLabel, durationLabel, single-marker fallback fields, media*) — accept-and-ignore them
+  // here so an adapter already built against that fuller shape (e.g.
+  // packages/app/src/pages/workflows/adapter.ts) keeps compiling verbatim at cutover time,
+  // without forcing a premature decision about which of those fields future renderers add.
   [key: string]: unknown;
 }
 
@@ -271,6 +281,8 @@ export interface ResolvedNode {
   inlineTextPlaceholder: string;
   compactPath: CanvasWorkbenchCompactPath | null;
   annotations: CanvasWorkbenchAnnotation[];
+  chips: CanvasWorkbenchChip[];
+  footerChips: CanvasWorkbenchChip[];
   contextActions: CanvasWorkbenchAction[];
   inputPorts: CanvasWorkbenchPort[];
   outputPorts: CanvasWorkbenchPort[];

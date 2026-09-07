@@ -1,10 +1,20 @@
 import { createCanvasWorkbench } from "../src/index.js";
+import { sampleProcessSurface } from "./fixtures/sample-process.js";
 import { sampleSurface } from "./fixtures/sample.js";
+import { sampleWorkflowSurface } from "./fixtures/sample-workflow.js";
+
+const fixtureParam = new URLSearchParams(window.location.search).get("fixture");
+const surface =
+  fixtureParam === "process"
+    ? sampleProcessSurface
+    : fixtureParam === "workflow"
+      ? sampleWorkflowSurface
+      : sampleSurface;
 
 const host = document.getElementById("host");
 if (!host) throw new Error("#host element not found");
 
-const workbench = createCanvasWorkbench(host, sampleSurface, { hasClipboardHandler: true });
+const workbench = createCanvasWorkbench(host, surface, { hasClipboardHandler: true });
 workbench.fitView();
 
 workbench.on("selectionChanged", (event) => console.log("selectionChanged", event));

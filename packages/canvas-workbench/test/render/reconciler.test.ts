@@ -142,4 +142,34 @@ describe("render reconciler", () => {
     reconciler.destroy();
     stageBundle.destroy();
   });
+
+  it("shows a link's label pill only when the link has one", () => {
+    const labelFixture: CanvasWorkbenchSurfaceInput = {
+      surfaceId: "label-fixture",
+      nodes: [
+        { id: "switch", title: "Switch", family: "workflow-decision", x: 0, y: 0 },
+        { id: "labeled", title: "Labeled target", x: 300, y: 0 },
+        { id: "unlabeled", title: "Unlabeled target", x: 300, y: 200 },
+      ],
+      links: [
+        { sourceId: "switch", targetId: "labeled", label: "Tasks" },
+        { sourceId: "switch", targetId: "unlabeled" },
+      ],
+    };
+
+    const container = createTestContainer();
+    const stageBundle = createStageLayers(container);
+    const store = createWorkbenchStore(labelFixture);
+    const registry = createDefaultRegistry();
+    const reconciler = createReconciler(stageBundle, store, registry);
+
+    const labelGroups = stageBundle.layers.links.find(".link-label");
+    expect(labelGroups.length).toBe(2);
+    const visible = labelGroups.filter((group) => group.visible());
+    expect(visible.length).toBe(1);
+    expect(visible[0]?.findOne(".link-label-text")?.text()).toBe("Tasks");
+
+    reconciler.destroy();
+    stageBundle.destroy();
+  });
 });
