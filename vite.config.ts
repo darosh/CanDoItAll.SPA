@@ -8,7 +8,13 @@ export default defineConfig({
     // Fetched/generated OpenAPI specs and the generated API client, not hand-authored
     // source — leave their formatting alone (see packages/api-client-generator's
     // spec:fetch/generate scripts).
-    ignorePatterns: ["packages/api-client-generator/spec/**", "packages/api-client/src/**"],
+    ignorePatterns: [
+      "packages/api-client-generator/spec/**",
+      "packages/api-client/src/**",
+      // Vitest's own toMatchFileSnapshot() writer, not hand-authored — oxfmt reformatting it
+      // differently on every `vp check --fix` fights the test writer's own pretty-printing.
+      "packages/canvas-workbench/test/__snapshots__/**",
+    ],
   },
   lint: {
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>canvas-workbench sandbox</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        font-family: system-ui, sans-serif;
+      }
+      #toolbar {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 1;
+        display: flex;
+        gap: 8px;
+      }
+      #toolbar button {
+        padding: 6px 10px;
+      }
+      #host {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="toolbar">
+      <button id="fit-view">Fit view</button>
+      <button id="zoom-100">100%</button>
+      <button id="select-check">Select "check"</button>
+    </div>
+    <div id="host"></div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

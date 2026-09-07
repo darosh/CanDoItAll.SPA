@@ -23,4 +23,5 @@ peerDependencyRules:
   allowedVersions:
     vite: "*"
 allowBuilds:
+  canvas: true
   vue-demi: true
