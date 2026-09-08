@@ -118,11 +118,14 @@ defineExpose({
   <Teleport to="body" :disabled="!isMaximized">
     <div
       v-bind="rootAttrs"
-      class="flex h-full min-h-0 flex-col"
+      class="flex min-h-0 flex-col"
       :class="
         isMaximized
-          ? ['fixed inset-x-0 bottom-0 z-50 bg-background', tabsVisible ? 'top-8' : 'top-0']
-          : []
+          ? [
+              'fixed inset-x-0 bottom-0 z-50 bg-background',
+              tabsVisible ? 'top-8 h-[calc(100dvh-2rem)]' : 'top-0 h-dvh',
+            ]
+          : 'h-full'
       "
     >
       <div
